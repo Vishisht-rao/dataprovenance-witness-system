@@ -1,0 +1,9 @@
+cryptography
+requests
+beautifulsoup4
+google-api-python-client
+google-auth-oauthlib
+google-auth
+dash
+dash-bootstrap-components
+pandas

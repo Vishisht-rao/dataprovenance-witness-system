@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM Provenance Logger</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    header { text-align: center; }
+    header h1 { font-size: 1.8rem; font-weight: 700; }
+    header p { margin-top: 0.4rem; color: #555; font-size: 0.95rem; }
+
+    .card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #444;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      background: #fafafa;
+      transition: border-color 0.15s;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="number"]:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #4a7cdc;
+      background: #fff;
+    }
+
+    .hint {
+      font-size: 0.78rem;
+      color: #777;
+      margin-top: 0.35rem;
+    }
+
+    .field { margin-bottom: 1rem; }
+    .field:last-child { margin-bottom: 0; }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .field-row .field { margin-bottom: 0; }
+
+    textarea { resize: vertical; }
+
+    button {
+      display: inline-block;
+      padding: 0.6rem 1.4rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s;
+    }
+
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-primary  { background: #4a7cdc; color: #fff; margin-top: 0.75rem; }
+    .btn-primary:hover:not(:disabled)  { background: #3a6bc8; }
+    .btn-secondary { background: #eee; color: #333; }
+    .btn-secondary:hover:not(:disabled) { background: #e0e0e0; }
+    .btn-success  { background: #27ae60; color: #fff; }
+    .btn-success:hover:not(:disabled)  { background: #219a52; }
+    .btn-danger   { background: #e74c3c; color: #fff; }
+    .btn-danger:hover:not(:disabled)   { background: #c0392b; }
+
+    /* File upload */
+    .upload-zone {
+      border: 2px dashed #ccc;
+      border-radius: 6px;
+      padding: 1rem;
+      text-align: center;
+      color: #888;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      margin-top: 0.75rem;
+    }
+    .upload-zone.drag-over { border-color: #4a7cdc; background: #eef4ff; color: #2a5aaa; }
+    .upload-zone p { pointer-events: none; }
+
+    .file-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.6rem; }
+
+    .pill {
+      display: flex; align-items: center; gap: 0.4rem;
+      background: #eef4ff; border: 1px solid #b3d0ff; border-radius: 20px;
+      padding: 0.2rem 0.6rem; font-size: 0.8rem; color: #2a5aaa;
+    }
+    .pill-remove { cursor: pointer; font-size: 1rem; line-height: 1; color: #5a8ae0; background: none; border: none; padding: 0; font-weight: 700; }
+    .pill-remove:hover { color: #c0392b; }
+
+    /* Radio group */
+    .radio-row { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+    .radio-row label { display: flex; align-items: center; gap: 0.4rem; font-weight: 500; margin-bottom: 0; cursor: pointer; }
+    .radio-row input { width: auto; }
+
+    /* Status banner */
+    #status {
+      display: none;
+      font-size: 0.9rem;
+      padding: 0.6rem 0.9rem;
+      border-radius: 5px;
+    }
+    #status.loading { display: block; background: #eef4ff; color: #2a5aaa; border: 1px solid #b3d0ff; }
+    #status.error   { display: block; background: #fff0f0; color: #c0392b; border: 1px solid #f0b3b3; }
+
+    /* Job ID banner (shown after submit, while polling) */
+    #jobBanner {
+      display: none;
+      background: #fffbe6;
+      border: 1px solid #f0d060;
+      border-radius: 6px;
+      padding: 0.9rem 1rem;
+      font-size: 0.88rem;
+      color: #555;
+    }
+    #jobBanner strong { color: #333; }
+    .job-id-row {
+      display: flex; align-items: center; gap: 0.5rem; margin: 0.5rem 0 0.25rem;
+      flex-wrap: wrap;
+    }
+    .job-id-value {
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.85rem;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 0.2rem 0.5rem;
+      word-break: break-all;
+    }
+
+    /* Output panel */
+    #outputPanel { display: none; }
+
+    #responseBox {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background: #fafafa;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      min-height: 80px;
+    }
+
+    .provenance-grid {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 0.4rem 0.75rem;
+      font-size: 0.88rem;
+    }
+    .provenance-grid .key { color: #555; font-weight: 500; }
+    .provenance-grid .val { word-break: break-all; }
+    .mono { font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.82rem; }
+
+    .saved-note { margin-top: 0.75rem; font-size: 0.8rem; color: #27ae60; }
+
+    .download-row { display: flex; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap; }
+
+    /* Log + batch items */
+    #logEntries, #batchItems {
+      margin-top: 1rem;
+      max-height: 480px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .log-entry {
+      border: 1px solid #e0e0e0; border-radius: 6px; padding: 0.75rem 1rem;
+      font-size: 0.85rem; background: #fafafa;
+    }
+    .log-entry-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.4rem; }
+    .log-entry-meta { color: #444; line-height: 1.5; }
+    .log-entry-meta strong { color: #222; }
+    .log-entry-prompt { color: #555; margin: 0.3rem 0; font-style: italic; white-space: pre-wrap; }
+    .log-entry-hash { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.3rem; }
+    .hash-label { color: #777; font-size: 0.8rem; }
+    .copy-btn { padding: 0.2rem 0.6rem; font-size: 0.75rem; font-weight: 500; background: #eee; color: #333; border-radius: 4px; }
+    .copy-btn:hover { background: #ddd; }
+    .empty-log { color: #888; font-size: 0.9rem; font-style: italic; }
+    .usage-badge { display: inline-block; font-size: 0.75rem; color: #666; background: #f0f0f0; border-radius: 4px; padding: 0.1rem 0.4rem; margin-left: 0.4rem; }
+    .status-tag { font-weight: 600; font-size: 0.8rem; }
+    .status-done   { color: #27ae60; }
+    .status-failed { color: #c0392b; }
+    .status-pending, .status-running { color: #888; }
+
+    /* Resume job card */
+    #resumeResult {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      border-radius: 5px;
+      font-size: 0.88rem;
+      display: none;
+    }
+    #resumeResult.pending { background: #eef4ff; color: #2a5aaa; border: 1px solid #b3d0ff; }
+    #resumeResult.done    { background: #f0fff4; color: #27ae60; border: 1px solid #a8e6c0; }
+    #resumeResult.error   { background: #fff0f0; color: #c0392b; border: 1px solid #f0b3b3; }
+
+    .info-box {
+      background: #fafafa;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .info-box strong { color: #333; }
+    .info-box code { font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.82rem; background: #eee; padding: 0.05rem 0.3rem; border-radius: 3px; }
+    .info-box pre {
+      margin-top: 0.5rem; background: #2d2d2d; color: #eee; padding: 0.6rem 0.8rem;
+      border-radius: 5px; font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.78rem; overflow-x: auto; white-space: pre; line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 1. HEADER -->
+  <header>
+    <h1>LLM Provenance Logger</h1>
+    <p>A research tool for tamper-evident recording of LLM API calls</p>
+  </header>
+
+  <!-- WORKFLOW MODE -->
+  <div class="card">
+    <h2>Workflow Mode</h2>
+    <div class="field">
+      <label for="workflowMode">Choose a workflow</label>
+      <select id="workflowMode">
+        <option value="single" selected>Single Prompt</option>
+        <option value="batch">Batch Processing (JSONL)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 2. CONFIGURATION PANEL -->
+  <div class="card">
+    <h2>Configuration</h2>
+
+    <div class="field">
+      <label for="researcherId">Researcher ID</label>
+      <input type="text" id="researcherId" placeholder="e.g. alice, lab_2024, ..." autocomplete="off" />
+      <p class="hint">Your identifier for grouping logs. Stored in your browser; never sent to anyone except this local server.</p>
+    </div>
+
+    <div class="field">
+      <label for="apiKey">OpenRouter API Key</label>
+      <input type="password" id="apiKey" placeholder="sk-or-v1-..." autocomplete="off" />
+      <p class="hint">Your key is never stored. It is used only for this request and stays in your browser.</p>
+    </div>
+
+    <div class="field" id="singleModelField">
+      <label for="model">Model &nbsp;<a href="https://openrouter.ai/models" target="_blank" rel="noopener noreferrer" style="font-weight:400;font-size:0.82rem;color:#4a7cdc;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Browse all OpenRouter models ↗</a></label>
+      <input type="text" id="model" value="anthropic/claude-opus-4.8"
+        placeholder="e.g. openai/gpt-5.5"
+        list="modelSuggestions" autocomplete="off" spellcheck="false" />
+      <datalist id="modelSuggestions"></datalist>
+      <p class="hint" id="modelHint">Enter any <a href="https://openrouter.ai/models" target="_blank" rel="noopener noreferrer" style="color:#4a7cdc;">OpenRouter model ID</a>. In batch mode this is the default (each JSONL line may override it).</p>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="temperature">Temperature</label>
+        <input type="number" id="temperature" value="0.7" min="0" max="2" step="0.1" />
+        <p class="hint">0 = deterministic, 2 = most creative</p>
+      </div>
+      <div class="field">
+        <label for="maxTokens">Max Tokens</label>
+        <input type="number" id="maxTokens" placeholder="(model default)" min="1" />
+        <p class="hint">Leave blank to use the model's default</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. SINGLE INPUT PANEL -->
+  <div class="card" id="singlePanel">
+    <h2>Input</h2>
+    <div class="field">
+      <label for="prompt">Prompt / Input</label>
+      <textarea id="prompt" rows="8" placeholder="Enter the text you want to send to the model..."></textarea>
+    </div>
+
+    <div class="upload-zone" id="uploadZone" title="Click or drag files here">
+      <p>Drag &amp; drop files here, or <strong>click to attach</strong></p>
+      <p style="margin-top:0.25rem; font-size:0.75rem;">Supports: images, PDFs, text files (.txt, .md, .csv)</p>
+    </div>
+    <input type="file" id="fileInput" multiple accept="image/*,application/pdf,text/*,.csv,.md,.txt" style="display:none" />
+    <div class="file-pills" id="filePills"></div>
+    <button class="btn-primary" id="submitBtn">Submit</button>
+  </div>
+
+  <!-- BATCH PROCESSING PANEL -->
+  <div class="card" id="batchPanel" style="display:none;">
+    <h2>Batch Processing</h2>
+
+    <div class="info-box">
+      Run many requests in one submission. OpenRouter has no batch API, so each request runs as
+      its own real-time call — but the whole batch is bound by <strong>one signature</strong>
+      (over all inputs and outputs together). Defaults (model, temperature, max tokens) come from
+      <strong>Configuration</strong> above.
+    </div>
+
+    <div class="field">
+      <label for="batchName">Batch name <span style="font-weight:400;color:#888;">(optional)</span></label>
+      <input type="text" id="batchName" placeholder="e.g. arxiv-reviews-june" autocomplete="off" maxlength="80" />
+      <p class="hint">A label to find this batch later in <em>My Jobs</em> and <em>Check a Job</em>.</p>
+    </div>
+
+    <div class="field">
+      <label>How do you want to provide your requests?</label>
+      <div class="radio-row">
+        <label><input type="radio" name="batchMode" value="jsonl" checked /> Upload a JSONL file</label>
+        <label><input type="radio" name="batchMode" value="helper" /> Same prompt for every file</label>
+      </div>
+    </div>
+
+    <!-- JSONL sub-panel -->
+    <div id="batchJsonlPanel">
+      <div class="info-box">
+        One JSON object per line. Only <code>prompt</code> is required.
+        <code>custom_id</code>, <code>model</code>, <code>model_params</code>, and
+        <code>files</code> are optional. Reference uploaded files by their filename.
+<pre>{"custom_id":"p1","prompt":"Write a review of this paper.","files":["p1.pdf"]}
+{"custom_id":"p2","prompt":"Write a review of this paper.","files":["p2.pdf"]}
+{"custom_id":"x","prompt":"Summarize.","model":"google/gemini-3.5-flash","model_params":{"temperature":0.2}}</pre>
+      </div>
+      <div class="field">
+        <label>JSONL file</label>
+        <div class="upload-zone" id="jsonlZone">
+          <p>Drag &amp; drop a <strong>.jsonl</strong> file here, or <strong>click to upload</strong></p>
+        </div>
+        <input type="file" id="jsonlInput" accept=".jsonl,.txt" style="display:none" />
+        <div id="jsonlName" class="hint"></div>
+      </div>
+    </div>
+
+    <!-- Helper sub-panel -->
+    <div id="batchHelperPanel" style="display:none;">
+      <div class="info-box">
+        Upload your files below and write one shared prompt. We build the JSONL for you —
+        one request per file (the prompt is sent with each file attached).
+      </div>
+      <div class="field">
+        <label for="helperPrompt">Shared prompt (applied to every file)</label>
+        <textarea id="helperPrompt" rows="4" placeholder="e.g. Write a review of this paper."></textarea>
+      </div>
+    </div>
+
+    <!-- Files (shared by both modes) -->
+    <div class="field">
+      <label id="batchFilesLabel">Files</label>
+      <p class="hint" id="batchFilesHint">
+        PDFs, images, or text files. In <em>JSONL</em> mode these are the files your lines refer to
+        by name; in <em>Same prompt</em> mode one request is created per file.
+      </p>
+      <div class="upload-zone" id="batchFilesZone">
+        <p>Drag &amp; drop files here, or <strong>click to upload</strong></p>
+      </div>
+      <input type="file" id="batchFilesInput" multiple accept="image/*,application/pdf,text/*,.csv,.md,.txt" style="display:none" />
+      <div class="file-pills" id="batchFilePills"></div>
+    </div>
+
+    <div id="batchSummary" class="hint"></div>
+
+    <button class="btn-primary" id="submitBatchBtn">Submit Batch</button>
+  </div>
+
+  <!-- 4. STATUS / LOADING -->
+  <div id="status"></div>
+
+  <!-- 5. JOB ID BANNER (shown while polling) -->
+  <div id="jobBanner">
+    <strong>Your request is running in the background.</strong>
+    This page will update automatically when the result is ready — you do not need to stay here.
+    If you close this tab, paste your Job ID into the <em>Check a Job</em> section below to retrieve your result later.
+    (Jobs are stored in the server's memory and will be lost if the server restarts.)
+    <div class="job-id-row">
+      <span>Job ID:</span>
+      <span class="job-id-value" id="currentJobId"></span>
+      <button class="btn-secondary copy-btn" id="copyJobIdBtn" style="padding:0.2rem 0.6rem;font-size:0.8rem;">Copy</button>
+    </div>
+    <div id="pollStatus" style="font-size:0.82rem; color:#888; margin-top:0.25rem;"></div>
+  </div>
+
+  <!-- 6. OUTPUT PANEL (single) -->
+  <div class="card" id="outputPanel">
+    <h2>Model Response</h2>
+    <div id="responseBox"></div>
+
+    <div style="margin-top:1.25rem;">
+      <h2>Provenance Record</h2>
+      <div class="provenance-grid">
+        <span class="key">Record ID</span>   <span class="val" id="recId"></span>
+        <span class="key">Timestamp</span>   <span class="val" id="recTs"></span>
+        <span class="key">Model</span>        <span class="val" id="recModel"></span>
+        <span class="key">Tokens</span>       <span class="val" id="recTokens"></span>
+        <span class="key">Cost (USD)</span>   <span class="val" id="recCost"></span>
+        <span class="key">Finish Reason</span><span class="val" id="recFinish"></span>
+        <span class="key">SHA-256 Hash</span> <span class="val mono" id="recHash"></span>
+        <span class="key" id="recSigLabel" style="display:none">Signature</span>
+        <span class="val mono" id="recSig" style="display:none"></span>
+        <span class="key" id="recAttachLabel" style="display:none">Attachments</span>
+        <span class="val" id="recAttach" style="display:none"></span>
+      </div>
+      <p class="saved-note">This record has been saved to logs/<span id="recResearcher"></span>/</p>
+      <div class="download-row">
+        <button class="btn-success" id="downloadRecordBtn">Download Record</button>
+        <button class="btn-secondary" id="downloadReceiptBtn">Download Receipt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6b. BATCH RESULTS PANEL -->
+  <div class="card" id="batchResultsPanel" style="display:none;">
+    <h2 id="batchResultsTitle">Batch Results</h2>
+    <div id="batchProgress" class="info-box" style="margin-bottom:1rem;"></div>
+    <div id="batchFailures" style="display:none;margin-bottom:1rem;"></div>
+    <div id="batchActions" class="download-row" style="margin-top:0;"></div>
+    <div id="batchItems"></div>
+  </div>
+
+  <!-- 7. LOG VIEWER -->
+  <div class="card">
+    <h2>Provenance Log</h2>
+    <button class="btn-secondary" id="viewLogBtn">View My Provenance Log</button>
+    <div id="logEntries"></div>
+  </div>
+
+  <!-- 8. CHECK A JOB BY ID -->
+  <div class="card">
+    <h2>Check a Job</h2>
+    <div class="info-box">
+      <strong>Job ID or batch name.</strong> When you submit a query the server returns a Job ID and runs it in the background. Paste that Job ID — or the <em>batch name</em> you gave a batch — here to look up its status and retrieve the result. Your most recent Job ID is saved automatically in your browser.
+    </div>
+    <div class="field" style="margin-bottom:0.75rem;">
+      <label for="resumeJobId">Job ID or batch name</label>
+      <input type="text" id="resumeJobId" placeholder="Paste a Job ID or type a batch name..." autocomplete="off" />
+    </div>
+    <button class="btn-secondary" id="checkJobBtn">Check Job Status</button>
+    <div id="resumeResult"></div>
+  </div>
+
+  <!-- 8b. MY JOBS (by researcher id) -->
+  <div class="card">
+    <h2>My Jobs</h2>
+    <div class="info-box">
+      Enter a Researcher ID to list every job under it — running batches, ones
+      awaiting finalize, and finished batches still on disk. Click any job to open it.
+    </div>
+    <div class="field" style="margin-bottom:0.75rem;">
+      <label for="myJobsResearcher">Researcher ID</label>
+      <input type="text" id="myJobsResearcher" placeholder="e.g. alice" autocomplete="off" />
+    </div>
+    <button class="btn-secondary" id="myJobsBtn">List My Jobs</button>
+    <div id="myJobsList" style="margin-top:1rem;"></div>
+  </div>
+
+</div>
+
+<script>
+  // ── Persistence ───────────────────────────────────────────────────────────
+  const stored = k => localStorage.getItem(k) || '';
+
+  const researcherEl  = document.getElementById('researcherId');
+  const apiKeyEl      = document.getElementById('apiKey');
+  const modelEl       = document.getElementById('model');
+  const temperatureEl = document.getElementById('temperature');
+  const maxTokensEl   = document.getElementById('maxTokens');
+  const promptEl      = document.getElementById('prompt');
+
+  const workflowModeEl   = document.getElementById('workflowMode');
+  const singlePanel      = document.getElementById('singlePanel');
+  const batchPanel       = document.getElementById('batchPanel');
+  const batchResultsPanel = document.getElementById('batchResultsPanel');
+  const outputPanel      = document.getElementById('outputPanel');
+
+  researcherEl.value = stored('researcherId');
+  apiKeyEl.value     = stored('apiKey');
+
+  const lastJobId = stored('lastJobId');
+  if (lastJobId) document.getElementById('resumeJobId').value = lastJobId;
+  if (stored('researcherId')) document.getElementById('myJobsResearcher').value = stored('researcherId');
+
+  researcherEl.addEventListener('input', () => localStorage.setItem('researcherId', researcherEl.value));
+  apiKeyEl.addEventListener('input',     () => localStorage.setItem('apiKey', apiKeyEl.value));
+
+  // ── Model autocomplete ────────────────────────────────────────────────────
+  (async function loadModelSuggestions() {
+    const datalist = document.getElementById('modelSuggestions');
+    if (!datalist) return;
+    const CACHE_KEY = 'or_models_v1';
+    const CACHE_TTL = 30 * 60 * 1000; // 30 min
+
+    let models;
+    try {
+      const cached = sessionStorage.getItem(CACHE_KEY);
+      if (cached) {
+        const { ts, data } = JSON.parse(cached);
+        if (Date.now() - ts < CACHE_TTL) models = data;
+      }
+      if (!models) {
+        const res = await fetch('https://openrouter.ai/api/v1/models');
+        if (!res.ok) return;
+        const json = await res.json();
+        models = (json.data || []).filter(m => !m.id.startsWith('~'));
+        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: models }));
+      }
+      for (const m of models) {
+        const opt = document.createElement('option');
+        opt.value = m.id;
+        opt.label = m.name || m.id;
+        datalist.appendChild(opt);
+      }
+    } catch { /* autocomplete is optional — silently ignore fetch errors */ }
+  })();
+
+  // ── Status helpers ──────────────────────────────────────────────────────────
+  const statusEl = document.getElementById('status');
+  function setStatus(type, msg) { statusEl.className = type; statusEl.textContent = msg; }
+  function clearStatus() { statusEl.className = ''; statusEl.style.display = 'none'; statusEl.textContent = ''; }
+  function hideJobBanner() { document.getElementById('jobBanner').style.display = 'none'; }
+
+  // ── Workflow toggle ───────────────────────────────────────────────────────
+  workflowModeEl.addEventListener('change', () => {
+    const batch = workflowModeEl.value === 'batch';
+    singlePanel.style.display = batch ? 'none' : 'block';
+    batchPanel.style.display  = batch ? 'block' : 'none';
+    if (batch) { outputPanel.style.display = 'none'; }
+    else       { batchResultsPanel.style.display = 'none'; }
+    updateBatchSummary();
+  });
+
+  // ── Single-prompt file handling ─────────────────────────────────────────────
+  const uploadZone  = document.getElementById('uploadZone');
+  const fileInput   = document.getElementById('fileInput');
+  const filePillsEl = document.getElementById('filePills');
+  let attachedFiles = [];
+
+  uploadZone.addEventListener('click', () => fileInput.click());
+  uploadZone.addEventListener('dragover',  e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+  uploadZone.addEventListener('drop', e => { e.preventDefault(); uploadZone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files); });
+  fileInput.addEventListener('change', () => { handleFiles(fileInput.files); fileInput.value = ''; });
+
+  function handleFiles(fileList) {
+    for (const file of fileList) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl   = reader.result;
+        const data_b64  = dataUrl.slice(dataUrl.indexOf(',') + 1);
+        const mime_type = file.type || 'application/octet-stream';
+        attachedFiles.push({ filename: file.name, mime_type, data_b64 });
+        renderPills();
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function renderPills() {
+    filePillsEl.innerHTML = '';
+    attachedFiles.forEach((f, i) => {
+      const pill = document.createElement('span');
+      pill.className = 'pill';
+      pill.innerHTML = `${escapeHtml(f.filename)} <button class="pill-remove" title="Remove">&times;</button>`;
+      pill.querySelector('.pill-remove').addEventListener('click', () => { attachedFiles.splice(i, 1); renderPills(); });
+      filePillsEl.appendChild(pill);
+    });
+  }
+
+  // ── Batch file handling (real File objects sent as multipart) ───────────────
+  let batchFiles = [];   // File[]
+  let jsonlFile  = null; // File
+
+  const batchFilesZone  = document.getElementById('batchFilesZone');
+  const batchFilesInput = document.getElementById('batchFilesInput');
+  const batchFilePills  = document.getElementById('batchFilePills');
+
+  function renderBatchFilePills() {
+    batchFilePills.innerHTML = '';
+    batchFiles.forEach((f, i) => {
+      const pill = document.createElement('span');
+      pill.className = 'pill';
+      pill.innerHTML = `${escapeHtml(f.name)} <button class="pill-remove" title="Remove">&times;</button>`;
+      pill.querySelector('.pill-remove').addEventListener('click', () => { batchFiles.splice(i, 1); renderBatchFilePills(); updateBatchSummary(); });
+      batchFilePills.appendChild(pill);
+    });
+  }
+  function addBatchFiles(list) { for (const f of list) batchFiles.push(f); renderBatchFilePills(); updateBatchSummary(); }
+
+  function clearSingleUploads() {
+    attachedFiles = [];
+    filePillsEl.innerHTML = '';
+    fileInput.value = '';
+  }
+
+  function clearBatchUploads() {
+    batchFiles = [];
+    jsonlFile = null;
+    batchFilePills.innerHTML = '';
+    batchFilesInput.value = '';
+    jsonlInput.value = '';
+    document.getElementById('jsonlName').textContent = '';
+    document.getElementById('batchName').value = '';
+    updateBatchSummary();
+  }
+
+  batchFilesZone.addEventListener('click', () => batchFilesInput.click());
+  batchFilesInput.addEventListener('change', () => { addBatchFiles(batchFilesInput.files); batchFilesInput.value = ''; });
+  batchFilesZone.addEventListener('dragover',  e => { e.preventDefault(); batchFilesZone.classList.add('drag-over'); });
+  batchFilesZone.addEventListener('dragleave', () => batchFilesZone.classList.remove('drag-over'));
+  batchFilesZone.addEventListener('drop', e => { e.preventDefault(); batchFilesZone.classList.remove('drag-over'); addBatchFiles(e.dataTransfer.files); });
+
+  const jsonlZone  = document.getElementById('jsonlZone');
+  const jsonlInput = document.getElementById('jsonlInput');
+  const jsonlName  = document.getElementById('jsonlName');
+  function setJsonl(f) { jsonlFile = f; jsonlName.textContent = f ? `Selected: ${f.name}` : ''; updateBatchSummary(); }
+
+  jsonlZone.addEventListener('click', () => jsonlInput.click());
+  jsonlInput.addEventListener('change', () => { if (jsonlInput.files[0]) setJsonl(jsonlInput.files[0]); jsonlInput.value = ''; });
+  jsonlZone.addEventListener('dragover',  e => { e.preventDefault(); jsonlZone.classList.add('drag-over'); });
+  jsonlZone.addEventListener('dragleave', () => jsonlZone.classList.remove('drag-over'));
+  jsonlZone.addEventListener('drop', e => { e.preventDefault(); jsonlZone.classList.remove('drag-over'); if (e.dataTransfer.files[0]) setJsonl(e.dataTransfer.files[0]); });
+
+  // ── Batch sub-mode toggle ───────────────────────────────────────────────────
+  const batchJsonlPanel  = document.getElementById('batchJsonlPanel');
+  const batchHelperPanel = document.getElementById('batchHelperPanel');
+  function currentBatchMode() {
+    const checked = document.querySelector('input[name="batchMode"]:checked');
+    return checked ? checked.value : 'jsonl';
+  }
+  document.querySelectorAll('input[name="batchMode"]').forEach(r => r.addEventListener('change', () => {
+    const mode = currentBatchMode();
+    batchJsonlPanel.style.display  = mode === 'jsonl'  ? 'block' : 'none';
+    batchHelperPanel.style.display = mode === 'helper' ? 'block' : 'none';
+    updateBatchSummary();
+  }));
+
+  function updateBatchSummary() {
+    const summaryEl = document.getElementById('batchSummary');
+    if (!summaryEl) return;
+    const mode  = currentBatchMode();
+    const model = modelEl.value;
+    let requests;
+    if (mode === 'helper') requests = `${batchFiles.length} (one per file)`;
+    else requests = jsonlFile ? 'one per JSONL line' : '—';
+    summaryEl.innerHTML =
+      `Default model: <strong>${escapeHtml(model)}</strong> &nbsp;·&nbsp; ` +
+      `Files: <strong>${batchFiles.length}</strong> &nbsp;·&nbsp; ` +
+      `Requests: <strong>${requests}</strong>`;
+  }
+  modelEl.addEventListener('input', updateBatchSummary);
+
+  // ── Polling state ─────────────────────────────────────────────────────────
+  let _pollTimer    = null;
+  let _activeJobId  = null;
+  let lastRecord    = null;
+  let lastReceipt   = null;
+
+  const submitBtn      = document.getElementById('submitBtn');
+  const submitBatchBtn = document.getElementById('submitBatchBtn');
+
+  function startPolling(jobId) {
+    _activeJobId = jobId;
+    localStorage.setItem('lastJobId', jobId);
+    document.getElementById('resumeJobId').value = jobId;
+
+    document.getElementById('currentJobId').textContent = jobId;
+    document.getElementById('jobBanner').style.display = 'block';
+
+    stopPolling();
+    _pollTimer = setInterval(() => pollJob(jobId), 3000);
+    pollJob(jobId); // immediate first check
+  }
+
+  function stopPolling() {
+    if (_pollTimer) { clearInterval(_pollTimer); _pollTimer = null; }
+  }
+
+  async function pollJob(jobId) {
+    try {
+      const res = await fetch(`/api/job/${encodeURIComponent(jobId)}`);
+      if (jobId !== _activeJobId) return;   // a different job was opened mid-flight; drop this
+      const job = await res.json();
+
+      if (!res.ok) {
+        stopPolling();
+        setStatus('error', job.detail || `Error ${res.status}`);
+        hideJobBanner();
+        return;
+      }
+
+      const elapsed = job.created_at
+        ? Math.round((Date.now() - new Date(job.created_at).getTime()) / 1000)
+        : '?';
+      document.getElementById('pollStatus').textContent = `Checking… (${elapsed}s elapsed)`;
+
+      if (job.type === 'batch') {
+        renderBatchOutput(job);
+        if (job.status === 'done' || job.status === 'awaiting_finalize' || job.status === 'error') {
+          stopPolling();
+          hideJobBanner();
+          if (job.status === 'error') setStatus('error', job.error || 'The batch failed.');
+          else clearStatus();
+        }
+        return;
+      }
+
+      if (job.status === 'done') {
+        stopPolling();
+        hideJobBanner();
+        clearStatus();
+        renderOutput(job.record, job.receipt, job.output);
+      } else if (job.status === 'error') {
+        stopPolling();
+        hideJobBanner();
+        setStatus('error', job.error || 'The job failed.');
+      }
+      // pending / running → keep polling
+    } catch (err) {
+      document.getElementById('pollStatus').textContent = `Network error — retrying…`;
+    }
+  }
+
+  // ── Submit (single) ─────────────────────────────────────────────────────────
+  submitBtn.addEventListener('click', async () => {
+    const researcher_id = researcherEl.value.trim();
+    const api_key       = apiKeyEl.value.trim();
+    const model         = modelEl.value;
+    const prompt        = promptEl.value.trim();
+
+    clearStatus();
+    if (!researcher_id) { setStatus('error', 'Please enter a Researcher ID.'); return; }
+    if (!api_key)        { setStatus('error', 'Please enter an OpenRouter API key.'); return; }
+    if (!prompt)         { setStatus('error', 'Please enter a prompt.'); return; }
+
+    const tempVal = parseFloat(temperatureEl.value);
+    const maxTok  = parseInt(maxTokensEl.value, 10);
+    const model_params = {};
+    if (!isNaN(tempVal)) model_params.temperature = tempVal;
+    if (!isNaN(maxTok) && maxTokensEl.value.trim()) model_params.max_tokens = maxTok;
+
+    submitBtn.disabled = true;
+    stopPolling();
+
+    try {
+      const res = await fetch('/api/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ api_key, researcher_id, model, model_params, prompt, files: attachedFiles }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setStatus('error', data.detail || `Error ${res.status}`); submitBtn.disabled = false; return; }
+      startPolling(data.job_id);
+      clearSingleUploads();
+      submitBtn.disabled = false;
+    } catch (err) {
+      setStatus('error', 'Network error — could not reach the server.');
+      submitBtn.disabled = false;
+    }
+  });
+
+  // ── Submit (batch) ────────────────────────────────────────────────────────
+  submitBatchBtn.addEventListener('click', async () => {
+    const researcher_id = researcherEl.value.trim();
+    const api_key       = apiKeyEl.value.trim();
+
+    clearStatus();
+    if (!researcher_id) { setStatus('error', 'Please enter a Researcher ID.'); return; }
+    if (!api_key)        { setStatus('error', 'Please enter an OpenRouter API key.'); return; }
+
+    const mode = currentBatchMode();
+    let jsonlBlob, jsonlFilename = 'batch.jsonl';
+
+    if (mode === 'jsonl') {
+      if (!jsonlFile) { setStatus('error', 'Please upload a JSONL file.'); return; }
+      jsonlBlob = jsonlFile;
+      jsonlFilename = jsonlFile.name;
+    } else {
+      const sharedPrompt = document.getElementById('helperPrompt').value.trim();
+      if (!sharedPrompt)          { setStatus('error', 'Please enter a shared prompt.'); return; }
+      if (batchFiles.length === 0) { setStatus('error', 'Please upload at least one file.'); return; }
+      const lines = batchFiles.map(f => {
+        const stem = f.name.replace(/\.[^/.]+$/, '');
+        return JSON.stringify({ custom_id: stem, prompt: sharedPrompt, files: [f.name] });
+      });
+      jsonlBlob = new Blob([lines.join('\n')], { type: 'application/jsonl' });
+    }
+
+    const fd = new FormData();
+    fd.append('api_key', api_key);
+    fd.append('researcher_id', researcher_id);
+    fd.append('jsonl', jsonlBlob, jsonlFilename);
+    for (const f of batchFiles) fd.append('files', f);
+    fd.append('model', modelEl.value);
+    fd.append('temperature', temperatureEl.value);
+    fd.append('max_tokens', maxTokensEl.value);
+    fd.append('batch_name', document.getElementById('batchName').value.trim());
+
+    submitBatchBtn.disabled = true;
+    stopPolling();
+    setStatus('loading', 'Uploading batch…');
+
+    try {
+      const res = await fetch('/api/batch-query', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok) { setStatus('error', data.detail || `Error ${res.status}`); submitBatchBtn.disabled = false; return; }
+      clearStatus();
+      startPolling(data.job_id);
+      clearBatchUploads();
+      submitBatchBtn.disabled = false;
+    } catch (err) {
+      setStatus('error', 'Network error while submitting batch.');
+      submitBatchBtn.disabled = false;
+    }
+  });
+
+  // ── Batch retry / finalize ──────────────────────────────────────────────────
+  async function batchAction(jobId, action, pdfMode) {
+    const msgs = { retry: 'Retrying failed items…', finalize: 'Signing & saving…', cancel: 'Cancelling…' };
+    setStatus('loading', msgs[action] || '…');
+    try {
+      let url = `/api/batch/${encodeURIComponent(jobId)}/${action}`;
+      if (action === 'retry' && pdfMode) url += `?pdf_mode=${encodeURIComponent(pdfMode)}`;
+      const res = await fetch(url, { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok) { setStatus('error', data.detail || `Error ${res.status}`); return; }
+      clearStatus();
+      if (action === 'retry' || action === 'cancel') {
+        startPolling(jobId);          // background task still running; resume polling
+      } else {
+        renderBatchOutput(data);      // finalize returns the finished job synchronously
+      }
+    } catch (err) {
+      setStatus('error', 'Network error — could not reach the server.');
+    }
+  }
+
+  // ── Copy job ID button ────────────────────────────────────────────────────
+  document.getElementById('copyJobIdBtn').addEventListener('click', () => {
+    const val = document.getElementById('currentJobId').textContent;
+    navigator.clipboard.writeText(val).then(() => {
+      const btn = document.getElementById('copyJobIdBtn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+    });
+  });
+
+  // ── Render output (single) ──────────────────────────────────────────────────
+  function renderOutput(rec, receipt, outputText) {
+    lastRecord  = rec;
+    lastReceipt = receipt;
+
+    document.getElementById('responseBox').textContent = outputText;
+    document.getElementById('recId').textContent    = rec.id;
+    document.getElementById('recTs').textContent    = new Date(rec.timestamp).toLocaleString();
+    document.getElementById('recModel').textContent = rec.model;
+    document.getElementById('recResearcher').textContent = stored('researcherId');
+
+    const u = rec.usage || {};
+    document.getElementById('recTokens').textContent =
+      `${u.prompt_tokens ?? '—'} in / ${u.completion_tokens ?? '—'} out / ${u.total_tokens ?? '—'} total`;
+    document.getElementById('recCost').textContent =
+      u.cost != null ? `$${u.cost.toFixed(6)}` : '—';
+    document.getElementById('recFinish').textContent = rec.finish_reason || '—';
+    document.getElementById('recHash').textContent   = rec.hash;
+
+    const sigLabel = document.getElementById('recSigLabel');
+    const sigEl    = document.getElementById('recSig');
+    if (receipt && receipt.signature) {
+      sigLabel.style.display = ''; sigEl.style.display = ''; sigEl.textContent = receipt.signature;
+    } else {
+      sigLabel.style.display = 'none'; sigEl.style.display = 'none';
+    }
+
+    const attachLabel = document.getElementById('recAttachLabel');
+    const attachEl    = document.getElementById('recAttach');
+    const recFiles = rec.files || rec.attachments;
+    if (recFiles && recFiles.length) {
+      attachLabel.style.display = ''; attachEl.style.display = '';
+      attachEl.textContent = recFiles.map(a => a.filename).join(', ');
+    } else {
+      attachLabel.style.display = 'none'; attachEl.style.display = 'none';
+    }
+
+    outputPanel.style.display = 'block';
+  }
+
+  // ── Render output (batch) ───────────────────────────────────────────────────
+  function renderBatchOutput(job) {
+    batchResultsPanel.style.display = 'block';
+    document.getElementById('batchResultsTitle').textContent =
+      job.batch_name ? `Batch Results — ${job.batch_name}` : 'Batch Results';
+
+    const total  = job.requested_count;
+    const done   = job.completed;
+    const failed = job.failed;
+    const prog   = document.getElementById('batchProgress');
+
+    let line;
+    if (job.status === 'pending' || job.status === 'running') {
+      line = `Running… <strong>${done}/${total}</strong> done${failed ? `, ${failed} failed` : ''}.`;
+    } else if (job.status === 'awaiting_finalize') {
+      line = `<strong>${done}/${total}</strong> succeeded, <strong>${failed}</strong> failed. ` +
+             `Retry the failures, or sign &amp; save the successful items as one batch.`;
+    } else if (job.status === 'done') {
+      line = `Done — ${job.signed ? 'signed' : 'recorded (unsigned)'} batch ` +
+             `<strong>${escapeHtml(job.batch_id || '')}</strong> of <strong>${done}</strong> item(s)` +
+             `${failed ? `, ${failed} failed and excluded from the signature` : ''}.`;
+    } else if (job.status === 'error') {
+      line = `Batch failed: ${escapeHtml(job.error || 'unknown error')}`;
+    } else {
+      line = `Status: ${escapeHtml(job.status)}`;
+    }
+    prog.innerHTML = line;
+
+    // Actions
+    const actions = document.getElementById('batchActions');
+    actions.innerHTML = '';
+    if (job.status === 'running' || job.status === 'pending') {
+      const cancelBtn = document.createElement('button');
+      cancelBtn.className = 'btn-danger';
+      cancelBtn.textContent = 'Cancel batch';
+      cancelBtn.addEventListener('click', () => batchAction(job.job_id, 'cancel'));
+      actions.append(cancelBtn);
+    } else if (job.status === 'awaiting_finalize') {
+      // PDF retry-method selector: the auto path (native → free Cloudflare) runs
+      // on the first try; if a PDF still won't parse, the user can retry those
+      // items with paid Mistral OCR or free local text extraction.
+      const pdfWrap = document.createElement('span');
+      pdfWrap.style.cssText = 'display:inline-flex;align-items:center;gap:0.35rem;margin-right:0.5rem;font-size:0.85rem;color:#555;';
+      const pdfLabel = document.createElement('label');
+      pdfLabel.textContent = 'PDF method:';
+      pdfLabel.htmlFor = 'retryPdfMode';
+      const pdfSel = document.createElement('select');
+      pdfSel.id = 'retryPdfMode';
+      pdfSel.style.cssText = 'padding:0.25rem 0.4rem;border:1px solid #ccc;border-radius:4px;font-size:0.85rem;';
+      pdfSel.innerHTML =
+        `<option value="auto">Auto (native → free Cloudflare)</option>` +
+        `<option value="text">Local text extraction (free, lossy)</option>` +
+        `<option value="mistral">Mistral OCR (paid ~$2/1k pages)</option>`;
+      pdfWrap.append(pdfLabel, pdfSel);
+
+      const retryBtn = document.createElement('button');
+      retryBtn.className = 'btn-secondary';
+      retryBtn.textContent = `Retry failed (${failed})`;
+      retryBtn.addEventListener('click', () => batchAction(job.job_id, 'retry', pdfSel.value));
+
+      const signBtn = document.createElement('button');
+      signBtn.className = 'btn-success';
+      signBtn.textContent = `Sign & save (${done})`;
+      signBtn.addEventListener('click', () => batchAction(job.job_id, 'finalize'));
+
+      actions.append(pdfWrap, retryBtn, signBtn);
+    } else if (job.status === 'done') {
+      const zipBtn = document.createElement('button');
+      zipBtn.className = 'btn-success';
+      zipBtn.textContent = 'Download record + receipt (ZIP)';
+      zipBtn.title = 'The two files to publish: the signed batch record (all outputs) and the receipt (signature).';
+      zipBtn.addEventListener('click', () => { window.location = `/api/job/${encodeURIComponent(job.job_id)}/download`; });
+
+      actions.append(zipBtn);
+    }
+
+    // Failures summary — always visible above the full list when there are failures
+    const HTTP_MEANINGS = {
+      400: 'Bad request — input rejected (e.g. context too long for this model, or a PDF unreadable even after text-extraction fallback)',
+      401: 'Unauthorized — API key is invalid or missing',
+      402: 'Payment required — account has no remaining credits',
+      403: 'Forbidden — account suspended or access denied',
+      404: 'Not found — model ID does not exist on OpenRouter',
+      429: 'Rate limit — too many requests; auto-retried 3× but still failed',
+      500: 'Internal server error — OpenRouter-side problem; auto-retried 3×',
+      502: 'Bad gateway — upstream model unreachable; auto-retried 3×',
+      503: 'Service unavailable — model temporarily down; auto-retried 3×',
+      504: 'Gateway timeout — model took too long to respond; auto-retried 3×',
+    };
+    const failuresEl = document.getElementById('batchFailures');
+    const failedItems = (job.items || []).filter(it => it.status === 'failed');
+    if (failedItems.length > 0) {
+      failuresEl.style.display = '';
+      failuresEl.innerHTML =
+        `<div style="border:1px solid #f5c6cb;border-radius:6px;background:#fff5f5;padding:0.9rem 1rem;">` +
+        `<strong style="color:#c0392b;">Failed items (${failedItems.length})</strong>` +
+        `<ul style="margin:0.5rem 0 0 1.1rem;padding:0;font-size:0.88rem;color:#444;">` +
+        failedItems.map(it => {
+          const code = it.http_status;
+          const rawMsg = it.error_message || 'unknown error';
+          const aborted = /aborted|cancelled by user/i.test(rawMsg);
+          const pdfParse = /parse|file_data|pdf/i.test(rawMsg) && !aborted;
+          const italic = 'color:#888;font-style:italic;';
+          let codeTag, meaning;
+          if (aborted) {
+            codeTag = `<code style="color:#888;">[not run]</code> `;
+            meaning = `<span style="${italic}"> — batch was cancelled before this item ran. Hit "Retry failed" to run it.</span>`;
+          } else if (pdfParse) {
+            codeTag = `<code style="color:#c0392b;">[PDF]</code> `;
+            meaning = `<span style="${italic}"> — the free path (native model reader → Cloudflare parser) could not read this PDF. Set <strong>PDF method</strong> to <strong>Mistral OCR (paid)</strong> or <strong>Local text extraction</strong> and hit "Retry failed".</span>`;
+          } else if (!code) {
+            codeTag = `<code style="color:#c0392b;">[network error]</code> `;
+            meaning = `<span style="${italic}"> — transient SSL/network error; auto-retried 3×. Hit "Retry failed" to try again.</span>`;
+          } else {
+            codeTag = `<code style="color:#c0392b;">[${code}]</code> `;
+            meaning = HTTP_MEANINGS[code]
+              ? `<span style="${italic}"> — ${HTTP_MEANINGS[code]}</span>`
+              : `<span style="${italic}"> — unexpected ${code >= 500 ? 'server' : 'client'} error</span>`;
+          }
+          const msg = escapeHtml(aborted ? 'Cancelled — not run' : rawMsg);
+          return `<li style="margin-bottom:0.4rem;">` +
+            `<strong>${escapeHtml(it.custom_id)}</strong>: ${codeTag}${msg}${meaning}</li>`;
+        }).join('') +
+        `</ul></div>`;
+    } else {
+      failuresEl.style.display = 'none';
+      failuresEl.innerHTML = '';
+    }
+
+    // Per-item list
+    const itemsEl = document.getElementById('batchItems');
+    itemsEl.innerHTML = '';
+    for (const it of (job.items || [])) {
+      const row = document.createElement('div');
+      row.className = 'log-entry';
+
+      const tag = `<span class="status-tag status-${it.status}">${it.status}</span>`;
+      let detail = '';
+      if (it.status === 'done') {
+        const u = it.usage || {};
+        const cost = u.cost != null ? ` · $${u.cost.toFixed(6)}` : '';
+        const tok  = u.total_tokens != null ? `<span class="usage-badge">${u.total_tokens} tokens${cost}</span>` : '';
+        const snip = it.output_snippet || '';
+        const ell  = snip.length >= 500 ? '…' : '';
+        detail =
+          `<div class="log-entry-prompt">${escapeHtml(snip)}${ell}</div>` +
+          `<div class="log-entry-hash"><span class="hash-label">SHA-256:</span>` +
+          `<span class="mono">${escapeHtml(it.hash || '')}</span> ${tok}</div>`;
+      } else if (it.status === 'failed') {
+        const code = it.http_status ? `[${it.http_status}] ` : '';
+        detail = `<div class="log-entry-prompt status-failed">${escapeHtml(code + (it.error_message || 'failed'))}</div>`;
+      }
+
+      row.innerHTML =
+        `<div class="log-entry-header">` +
+          `<div class="log-entry-meta"><strong>${escapeHtml(it.custom_id)}</strong> &nbsp;·&nbsp; ${escapeHtml(it.model || '')}</div>` +
+          tag +
+        `</div>` + detail;
+      itemsEl.appendChild(row);
+    }
+  }
+
+  // ── Downloads (single) ──────────────────────────────────────────────────────
+  document.getElementById('downloadRecordBtn').addEventListener('click', () => {
+    if (!lastRecord) return;
+    triggerDownload(`record_${lastRecord.id}.json`, JSON.stringify(lastRecord, null, 2));
+  });
+  document.getElementById('downloadReceiptBtn').addEventListener('click', () => {
+    if (!lastReceipt) return;
+    triggerDownload(`receipt_${lastReceipt.record_id}.json`, JSON.stringify(lastReceipt, null, 2));
+  });
+
+  function triggerDownload(filename, text) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  // ── Check a job by ID ─────────────────────────────────────────────────────
+  // Accepts a Job ID OR a batch name; the server resolves either to one job.
+  async function loadJob(identifier) {
+    const resultEl = document.getElementById('resumeResult');
+    if (!identifier) { resultEl.className = 'error'; resultEl.style.display = 'block'; resultEl.textContent = 'Please enter a Job ID or batch name.'; return; }
+
+    // Kill any poll timer from a previously-opened job FIRST, and clear the active
+    // marker so an already-in-flight poll for the old job is dropped when it returns.
+    stopPolling();
+    _activeJobId = null;
+    resultEl.className = 'pending';
+    resultEl.style.display = 'block';
+    resultEl.textContent = 'Loading…';
+
+    try {
+      const res = await fetch(`/api/resolve-job?q=${encodeURIComponent(identifier)}`);
+      const job = await res.json();
+
+      if (!res.ok) {
+        resultEl.className = 'error';
+        resultEl.textContent = job.detail || `Error ${res.status}`;
+        return;
+      }
+
+      const jobId = job.job_id;                  // resolved id (identifier may have been a name)
+      _activeJobId = jobId;
+      document.getElementById('resumeJobId').value = jobId;
+
+      if (job.type === 'batch') {
+        const nameTag = job.batch_name ? `“${escapeHtml(job.batch_name)}” ` : '';
+        resultEl.className = job.status === 'error' ? 'error' : (job.status === 'done' ? 'done' : 'pending');
+        resultEl.innerHTML = `Batch ${nameTag}${job.status} — ${job.completed}/${job.requested_count} done, ${job.failed} failed. Shown in “Batch Results” above ↑`;
+        renderBatchOutput(job);
+        batchResultsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (job.status === 'pending' || job.status === 'running') startPolling(jobId);
+        else setTimeout(() => { resultEl.style.display = 'none'; }, 4000);
+        return;
+      }
+
+      if (job.status === 'pending') {
+        resultEl.className = 'pending';
+        const elapsed = Math.round((Date.now() - new Date(job.created_at).getTime()) / 1000);
+        resultEl.textContent = `Job is still running (started ${elapsed}s ago, model: ${job.model}). Watching for the result…`;
+        startPolling(jobId);   // auto-updates + renders when it finishes
+      } else if (job.status === 'done') {
+        resultEl.className = 'done';
+        resultEl.textContent = `Done — result shown above ↑`;
+        renderOutput(job.record, job.receipt, job.output);
+        outputPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => { resultEl.style.display = 'none'; }, 4000);
+      } else if (job.status === 'error') {
+        resultEl.className = 'error';
+        resultEl.textContent = `Job failed: ${job.error}`;
+      }
+    } catch (err) {
+      resultEl.className = 'error';
+      resultEl.textContent = 'Network error — could not reach the server.';
+    }
+  }
+
+  document.getElementById('checkJobBtn').addEventListener('click', () => {
+    loadJob(document.getElementById('resumeJobId').value.trim());
+  });
+
+  // ── My Jobs (list every job under a researcher id) ────────────────────────
+  const JOB_STATUS_STYLE = {
+    pending:           ['#2a5aaa', '#eef4ff', '#b3d0ff', 'running'],
+    running:           ['#2a5aaa', '#eef4ff', '#b3d0ff', 'running'],
+    awaiting_finalize: ['#b9770e', '#fff7e6', '#f3d28a', 'needs finalize'],
+    done:              ['#27ae60', '#f0fff4', '#a8e6c0', 'done'],
+    error:             ['#c0392b', '#fff0f0', '#f0b3b3', 'error'],
+  };
+
+  function renderJobList(jobs, listEl) {
+    listEl.innerHTML = '';
+    for (const j of jobs) {
+      const [fg, bg, bd, label] = JOB_STATUS_STYLE[j.status] || ['#555', '#f3f3f3', '#ddd', j.status || '?'];
+      const row = document.createElement('div');
+      row.style.cssText = `display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0.8rem;border:1px solid #e3e3e3;border-radius:6px;margin-bottom:0.5rem;background:#fff;`;
+
+      const badge = `<span style="flex:0 0 auto;font-size:0.72rem;font-weight:600;color:${fg};background:${bg};border:1px solid ${bd};border-radius:10px;padding:0.12rem 0.5rem;">${label}</span>`;
+
+      const when = j.created_at ? new Date(j.created_at).toLocaleString() : '—';
+      // Lead with the batch name when present, else fall back to a generic title.
+      const title = j.batch_name
+        ? escapeHtml(j.batch_name)
+        : (j.type === 'batch' ? `Batch ${escapeHtml(j.batch_id || '')}` : 'Single query');
+      let detail;
+      if (j.type === 'batch') {
+        detail = `${j.completed ?? 0}/${j.requested_count ?? '?'} done${j.failed ? `, ${j.failed} failed` : ''}` +
+                 (j.model ? ` · ${escapeHtml(j.model)}` : '') +
+                 (j.batch_name && j.batch_id ? ` · batch ${escapeHtml(j.batch_id)}` : '');
+      } else {
+        detail = `${escapeHtml(j.model || '')}` + (j.prompt_snippet ? ` · “${escapeHtml(j.prompt_snippet)}”` : '');
+      }
+
+      const mid = document.createElement('div');
+      mid.style.cssText = 'flex:1 1 auto;min-width:0;';
+      mid.innerHTML = `<div style="font-size:0.9rem;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${badge} <strong>${title}</strong> <span style="color:#777;">· ${detail}</span></div>` +
+        `<div style="font-size:0.75rem;color:#999;margin-top:0.2rem;">${j.job_id ? `<code>${escapeHtml(j.job_id)}</code>` : '<em>no job id (pre-restart batch)</em>'} · ${when}</div>`;
+
+      const openBtn = document.createElement('button');
+      openBtn.className = 'btn-secondary';
+      openBtn.style.cssText = 'flex:0 0 auto;padding:0.3rem 0.8rem;font-size:0.82rem;';
+      openBtn.textContent = 'Open';
+      if (j.job_id) openBtn.addEventListener('click', () => loadJob(j.job_id));
+      else { openBtn.disabled = true; openBtn.title = 'This finalized batch predates job-id tracking; open it by batch files instead.'; }
+
+      row.append(mid, openBtn);
+      listEl.append(row);
+    }
+  }
+
+  document.getElementById('myJobsBtn').addEventListener('click', async () => {
+    const rid    = document.getElementById('myJobsResearcher').value.trim();
+    const listEl = document.getElementById('myJobsList');
+    if (!rid) { listEl.innerHTML = '<p class="empty-log">Enter a Researcher ID first.</p>'; return; }
+    listEl.innerHTML = '<p class="empty-log">Loading…</p>';
+    try {
+      const res  = await fetch(`/api/jobs?researcher_id=${encodeURIComponent(rid)}`);
+      const jobs = await res.json();
+      if (!res.ok) { listEl.innerHTML = `<p class="empty-log">${escapeHtml(jobs.detail || ('Error ' + res.status))}</p>`; return; }
+      if (!jobs.length) { listEl.innerHTML = '<p class="empty-log">No jobs found for this Researcher ID.</p>'; return; }
+      renderJobList(jobs, listEl);
+    } catch (err) {
+      listEl.innerHTML = '<p class="empty-log">Network error — could not reach the server.</p>';
+    }
+  });
+
+  // ── Log viewer ────────────────────────────────────────────────────────────
+  document.getElementById('viewLogBtn').addEventListener('click', async () => {
+    const researcher_id = researcherEl.value.trim();
+    const container     = document.getElementById('logEntries');
+    container.innerHTML = '<p class="empty-log">Loading…</p>';
+
+    if (!researcher_id) {
+      container.innerHTML = '<p class="empty-log">Enter a Researcher ID above first.</p>';
+      return;
+    }
+
+    try {
+      const res  = await fetch(`/api/log?researcher_id=${encodeURIComponent(researcher_id)}`);
+      const logs = await res.json();
+
+      if (!logs.length) { container.innerHTML = '<p class="empty-log">No records yet.</p>'; return; }
+
+      container.innerHTML = '';
+      for (const entry of [...logs].reverse()) {
+        const el = document.createElement('div');
+        el.className = 'log-entry';
+
+        const promptText = entry.prompt ?? entry.input ?? '';
+        const snippet = promptText.slice(0, 80) + (promptText.length > 80 ? '…' : '');
+        const u       = entry.usage || {};
+        const costStr = u.cost != null ? ` · $${u.cost.toFixed(6)}` : '';
+        const tokStr  = u.total_tokens != null ? `<span class="usage-badge">${u.total_tokens} tokens${costStr}</span>` : '';
+
+        el.innerHTML = `
+          <div class="log-entry-header">
+            <div class="log-entry-meta">
+              <strong>#${entry.id}</strong> &nbsp;|&nbsp; ${new Date(entry.timestamp).toLocaleString()}
+              &nbsp;|&nbsp; ${entry.model} ${tokStr}
+            </div>
+          </div>
+          <div class="log-entry-prompt">"${escapeHtml(snippet)}"</div>
+          <div class="log-entry-hash">
+            <span class="hash-label">SHA-256:</span>
+            <span class="mono">${entry.hash}</span>
+            <button class="copy-btn" data-hash="${entry.hash}">Copy Hash</button>
+          </div>
+        `;
+        container.appendChild(el);
+      }
+      container.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          navigator.clipboard.writeText(btn.dataset.hash).then(() => {
+            btn.textContent = 'Copied!';
+            setTimeout(() => { btn.textContent = 'Copy Hash'; }, 1500);
+          });
+        });
+      });
+    } catch (err) {
+      container.innerHTML = '<p class="empty-log" style="color:#c0392b">Failed to load log.</p>';
+    }
+  });
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  function escapeHtml(str = '') {
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
+
+  // ── Init ────────────────────────────────────────────────────────────────────
+  workflowModeEl.dispatchEvent(new Event('change'));
+  updateBatchSummary();
+</script>
+</body>
+</html>

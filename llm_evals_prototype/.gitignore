@@ -1,0 +1,12 @@
+# Witness secret signing key — must NEVER be committed.
+# (keys/witness_pk.ed25519, the matching public key, is intentionally NOT
+# ignored: it is public by design and is what verify.py / merge.py need to
+# check the pilot receipts already committed under tests/.)
+keys/witness_sk.ed25519
+
+venv/
+__pycache__/
+logs/
+files/
+merged_outputs/
+*.pyc

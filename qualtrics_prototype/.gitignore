@@ -1,0 +1,13 @@
+# Witness secret signing key — must NEVER be committed.
+# (witness_pk.ed25519, the matching public key, is intentionally NOT
+# ignored: it is public by design and is what a verifier needs to check
+# the pilot receipts already committed under outputs/.)
+witness_sk.ed25519
+
+# Google OAuth client config + the authorized-user token it produces.
+# Both grant access to the witness's Gmail inbox.
+credentials.json
+token.json
+
+__pycache__/
+*.pyc

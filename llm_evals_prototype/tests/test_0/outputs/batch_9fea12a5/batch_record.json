@@ -1,0 +1,1314 @@
+{
+  "job_id": "80e943c8-f902-47e4-9ab0-0b636397fef9",
+  "batch_id": "9fea12a5",
+  "batch_name": "5.4-mini-v1",
+  "created_at": "2026-06-19T17:43:43.899528Z",
+  "finalized_at": "2026-06-19T17:47:14.758260Z",
+  "model_default": "openai/gpt-5.4-mini",
+  "requested_count": 50,
+  "item_count": 50,
+  "items": [
+    {
+      "custom_id": "2606.18235v1",
+      "id": "85fd097a",
+      "timestamp": "2026-06-19T17:43:54.666058Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "EvolveNav presents a compelling and timely idea for zero-shot object-goal navigation: instead of treating foundation models as fixed semantic priors, the agent accumulates experience through a self-evolving rule memory and uses it to proactively avoid bad decisions before acting. The combination of inter-episode rule extraction, UCB-based retrieval, and intra-episode \u201cpreflection\u201d is conceptually neat and well aligned with the key bottlenecks of ZS-OGN, namely repeated mistakes and expensive trial-and-error. The paper is also well motivated, clearly written, and supported by strong empirical results on HM3D and MP3D, with consistent gains in both success rate and SPL. The qualitative examples help make the method intuitive, and the ablations do a good job of showing that both preflection and memory evolution contribute meaningfully.\n\nThat said, the paper\u2019s main weakness is that much of the improvement depends on LLM-driven reasoning and rule extraction, which may be difficult to reproduce reliably and could be sensitive to prompt design, model choice, or scene-specific artifacts. The \u201crules\u201d themselves seem somewhat brittle and may not always generalize well across unusual layouts, a limitation the authors acknowledge. In addition, while the UCB framing is sensible, the paper could better justify why this particular memory update is the best fit compared with other retrieval or confidence mechanisms. Overall, however, EvolveNav is a strong and interesting contribution that advances zero-shot navigation by making adaptation and anticipation first-class components of the agent\u2019s decision process.",
+      "usage": {
+        "prompt_tokens": 19660,
+        "completion_tokens": 309,
+        "total_tokens": 19969,
+        "cost": 0.0161355
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891026-5DDLiK2xzMO4TGUMo5em",
+      "hash": "85fd097ad3755f9a478860c7e6ad1d572738b0ccd85cd71cb42961e43601a9af",
+      "files": [
+        {
+          "filename": "2606.18235v1.pdf",
+          "file_hash": "479bdae5c9470ae1a343caa6256bfb55c6bbc99bffed963f0cde162c876198ab"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18223v1",
+      "id": "bda15ee9",
+      "timestamp": "2026-06-19T17:43:51.341869Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper tackles an important and underexplored problem in autonomous cyber-defense: inferring an attacker\u2019s hidden policy from partial observations in a discrete, multi-agent network environment. The main contribution is a practical policy-learning pipeline that uses imitation learning and dynamics models to predict red-agent actions from consecutive blue observations and blue actions, then embeds that capability into an evolving behavior tree (EBT) for runtime use. The problem formulation is clear, and the integration with CybORG CAGE Challenge 2 gives the work a realistic and relevant evaluation setting. I also found the progression from latent-action learning to discrete red-action decoding thoughtful, especially given the difficulty of working with partially observable cyber environments and the need to support multiple attacker strategies, including switching behavior.\n\nThe experimental results are encouraging, with high accuracy for the more deterministic B-line attacker and solid generalization to RedSwitch without additional training. The intrusion-level analysis is a useful added benefit, since it shows how predicted attacker behavior can support not only defense decisions but also situational awareness. That said, the approach appears to depend on access to labeled red-action data during training, which may limit direct applicability in real deployments. The paper also feels somewhat constrained by simulation and by the relatively structured CybORG setting; more discussion of scalability, robustness to noisier observations, and performance in more realistic/emulated networks would strengthen the case. Overall, this is a well-motivated and technically solid paper that makes a meaningful step toward more interpretable and proactive autonomous cyber defense.",
+      "usage": {
+        "prompt_tokens": 12501,
+        "completion_tokens": 305,
+        "total_tokens": 12806,
+        "cost": 0.01074825
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891024-QF57pWZbTHmAnyKweZ1L",
+      "hash": "bda15ee94d397122d2c02781178317c4c40a48eb3fdff00a09a39a03f21423b2",
+      "files": [
+        {
+          "filename": "2606.18223v1.pdf",
+          "file_hash": "5324551cf27f831ba863c3c77ed523803fffb40c2e7244097c96e4bdfc7d4c34"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18193v1",
+      "id": "03959ded",
+      "timestamp": "2026-06-19T17:43:52.277141Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper is a strong and timely contribution to LLM safety evaluation, with a clear red-teaming methodology and a large, well-structured benchmark spanning 7,826 harmful intents across ten harm categories. Its main strength is the conservative adjudication design: by re-checking all apparent jailbreaks with an independent three-judge panel, the authors reduce the risk of inflated success rates from noisy single-judge scoring. The comparison between adaptive iterative attacks and static obfuscation is especially valuable, since it shows that modern safety training appears to have largely neutralized superficial tricks while leaving a meaningful residual vulnerability to feedback-driven search. The analysis is also nicely granular, moving beyond aggregate ASR to identify which harm categories and subcategories remain most exposed.\n\nThat said, the paper\u2019s most important conclusion is also its most cautious: these are robustness measurements, not a comprehensive safety certificate. The partial coverage of the Fable 5 PAIR campaign is a notable limitation, and the use of black-box API access means the results may not fully capture production safety layers such as system prompts, filters, or monitoring. In addition, the reliance on judge models\u2014despite the majority-vote panel\u2014still leaves room for false negatives and subtle adjudication errors. Overall, though, the paper is persuasive, methodologically thoughtful, and valuable as an empirical warning that frontier models remain breakable under sustained automated pressure. Its findings are likely to be useful both for researchers studying attack transferability and for practitioners trying to harden context-sensitive refusal behavior.",
+      "usage": {
+        "prompt_tokens": 16803,
+        "completion_tokens": 308,
+        "total_tokens": 17111,
+        "cost": 0.01398825
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891024-h8UgqCMXrmwVPRPMnuvW",
+      "hash": "03959deddaa421679ce1594f83a555a0f3eeba356253b5e4875dbe0da1e13b54",
+      "files": [
+        {
+          "filename": "2606.18193v1.pdf",
+          "file_hash": "05cdd9412d00b49dd90e0f7a726a60d4b4da19d57556c37b5f4cec3d9a0de6e4"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18192v1",
+      "id": "f747980e",
+      "timestamp": "2026-06-19T17:43:51.460429Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents a compelling and timely contribution: an open, layout-faithful reconstruction of the SEC EDGAR archive into a token-efficient format for LLM pretraining and evaluation. The core idea is strong and practically important\u2014financial filings are rich in long-context, factual, and structurally meaningful text, yet existing pipelines often destroy exactly the cues that matter most, such as indentation, merged headers, and accounting table structure. The authors\u2019 emphasis on preserving visual semantics through MultiMarkdown is especially persuasive, and the reported gains on table reconstruction suggest the representation is indeed more usable than standard Markdown or plain text. The breadth of the corpus, together with the low overlap with Common Crawl-derived data, also makes SEFD potentially valuable as a contamination-resistant training source.\n\nThat said, the paper occasionally reads more like an engineering manifesto than a fully rigorous dataset paper. Some of the strongest claims\u2014especially around >99% accuracy, \u201ctoken-efficient\u201d reconstruction, and downstream usefulness for pretraining\u2014would benefit from deeper ablations, stronger human evaluation detail, and broader comparison against alternative parsing/normalization strategies. The benchmark sections are interesting, but both EDGAR-OCR and EDGAR-Forecast rely heavily on synthetic construction and model-assisted curation, which raises questions about representativeness and possible benchmark shaping. Still, as a data resource and systems paper, SEFD is impressive: it tackles a real bottleneck in financial NLP, offers a useful open corpus, and provides thoughtful evaluation tasks that go beyond retrieval. Overall, this is a strong and likely impactful paper, even if some empirical claims would need additional validation to fully convince a skeptical reader.",
+      "usage": {
+        "prompt_tokens": 18822,
+        "completion_tokens": 332,
+        "total_tokens": 19154,
+        "cost": 0.0156105
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891025-EYIXSOA4jfvZUAkJzmsz",
+      "hash": "f747980e71a03e1c60cb27d6c0837b1c7889d83a3e77b94407b988db820e7319",
+      "files": [
+        {
+          "filename": "2606.18192v1.pdf",
+          "file_hash": "e16e154b812a2cbad81872c47f5aaea162b57bc04565b9a71e46851f40874ce6"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18181v1",
+      "id": "f30d6638",
+      "timestamp": "2026-06-19T17:43:52.346694Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper addresses an important and underexplored problem: building a scalable, structured database of illegal, unreported, and unregulated fishing plus related seafood fraud and labor abuses. Its main strength is the ambition and practical relevance of IUU+DB, which combines LLM-based source classification, key data element extraction, deduplication, and trend analysis across heterogeneous sources. The taxonomy of 7 IUU+ types, 41 behaviors, and 100 KDE fields is a valuable contribution in itself, and the case studies suggest the system can surface meaningful patterns for enforcement and policy work. I also appreciated the authors\u2019 attention to operational details such as source auditability, version history, and a human-review interface, which make the system more credible than a purely experimental prototype.\n\nThat said, the paper also exposes several important limitations that reduce confidence in the current database quality. The evaluation set is relatively small, and the results show moderate classification performance with notable weaknesses in source-scope precision and several extraction groups, especially where mismatch rates are high. Since the paper treats many heterogeneous sources as equally trustworthy, the database appears better suited for triage and exploration than for definitive evidentiary use. The work would be stronger with more rigorous calibration of source reliability, deeper error analysis across languages and source types, and clearer discussion of how duplicates, conflicts, and ambiguous incidents affect downstream trends. Overall, this is a promising and timely systems paper with clear real-world impact, but it should be read as an early-stage infrastructure contribution rather than a fully mature global incident authority.",
+      "usage": {
+        "prompt_tokens": 18296,
+        "completion_tokens": 314,
+        "total_tokens": 18610,
+        "cost": 0.015135
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891025-f1ABzVpFuYGPVbDLkauj",
+      "hash": "f30d66386f2995170438cbcc9b0f56037a8af320ea93e0a27221f8ff3aac85b4",
+      "files": [
+        {
+          "filename": "2606.18181v1.pdf",
+          "file_hash": "fff33a6ad09a04e20772f0fa9b13c725d0661be8581a714cd642e2a5e303c229"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18168v1",
+      "id": "fdfe7da8",
+      "timestamp": "2026-06-19T17:43:57.302489Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper tackles an important and timely problem: whether agent-authored test files actually contain meaningful verification logic, rather than just the appearance of testing. The scale of the study is a major strength, with over 86k test-file patches across thousands of repositories and five different coding agents. The proposed taxonomy of oracle signals is useful and easy to understand, and the distinction between weak structural test code and strong behavioral assertions is practically relevant for both researchers and practitioners. I also appreciate that the authors go beyond simple descriptive statistics and try to connect oracle strength to merge outcomes with a multivariate regression, which helps support the claim that stronger oracle signals may matter in real workflows.\n\nThat said, the paper has some limitations that make the conclusions more suggestive than definitive. The taxonomy is syntactic and patch-based, so it cannot fully determine whether a test genuinely verifies the intended behavior or merely appears to do so. Relatedly, some categories such as mocks or snapshot checks can be context-dependent, and the paper acknowledges that implicit oracles are not captured. The regression analysis is a nice step, but merge outcomes are still confounded by many factors that are hard to observe in mined repository data, such as reviewer expectations, CI policies, or developer expertise. Overall, though, this is a strong empirical paper with a clear message: counting test files is not enough, and oracle quality should be treated as a first-class measure when evaluating AI-generated code.",
+      "usage": {
+        "prompt_tokens": 8029,
+        "completion_tokens": 290,
+        "total_tokens": 8319,
+        "cost": 0.00732675
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891031-LfAPqyf0Bt3GKyenv7Y8",
+      "hash": "fdfe7da8adae9c4a80850c531db52ec7c60dae94951b0b987067d739922c6eda",
+      "files": [
+        {
+          "filename": "2606.18168v1.pdf",
+          "file_hash": "efffd2111e11e6e39eba950e6bf7de104c3aa332c401815aef6df084b8c834a6"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18156v1",
+      "id": "bb9ab177",
+      "timestamp": "2026-06-19T17:44:24.936005Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents a well-motivated and technically thoughtful solution to a difficult problem: high-fidelity 3D face re-aging with view consistency. Its main strength is the observation that na\u00efvely applying a 2D age-editing model independently across views destroys subtle but important age cues, leading to over-smoothing in the final 3D result. The proposed pipeline\u2014fine-tuning a diffusion-based 2D re-aging model, then propagating age edits from a pivot view via warping and masked diffusion in a center-out fashion\u2014is elegant and practical. The experimental results are compelling, especially the qualitative improvements in wrinkle formation, identity preservation, and multi-view coherence relative to strong 3D editing baselines. The ablations also help isolate the value of each component, making the contribution easy to understand.\n\nThat said, the method has some limitations that temper the overall impact. The reliance on synthetic training pairs from SAM may introduce bias or constrain realism, and the system currently focuses primarily on facial regions, leaving hair, skin tone evolution, and other age-related cues largely unmodeled. The need for multiple views and iterative re-aging also makes the approach more pipeline-heavy than end-to-end alternatives, and the use of optical flow and inpainting means performance may degrade under occlusions or less controlled capture conditions. Still, within its target setting of high-quality captured face scans, the paper makes a strong contribution and advances the state of the art in a meaningful and well-justified way.",
+      "usage": {
+        "prompt_tokens": 29333,
+        "completion_tokens": 304,
+        "total_tokens": 29637,
+        "cost": 0.02336775
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891044-D8auJA4a3bDfZNYImpof",
+      "hash": "bb9ab177347311c2fba6a3f13eb47f8973e523ffd96ed5fbfe67ce9d773572aa",
+      "files": [
+        {
+          "filename": "2606.18156v1.pdf",
+          "file_hash": "312d7501c250c6992b0566ba0fd3422ddf2003b6f4b4fd27d93b7d0c932c3b4c"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18154v1",
+      "id": "d8ba684c",
+      "timestamp": "2026-06-19T17:43:58.966739Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents LEADS, an agentic framework for automatically discovering hybrid cardiac electrophysiology digital twins using an LLM guided by a structured action space. The main idea is well-motivated: instead of relying on experts to manually specify a hybrid physics-neural architecture, the method lets the agent search over a constrained catalog of diffusion and reaction components while gradient descent fits parameters. This is a thoughtful middle ground between rigid human-designed models and unconstrained LLM code generation, and the emphasis on physical plausibility and numerical stability is especially appropriate for cardiac simulation.\n\nThe experimental results are encouraging. On synthetic data, LEADS outperforms both a human-designed hybrid baseline and HDTwinGen, and it is able to recover the correct reaction model across multiple ground-truth settings. On real Utah EGM data, it also improves over the human-designed hybrid model and produces reasonable activation maps. The ablation study strengthens the case that both the physics-based reaction prior and the structured search space matter. That said, the gains over strong baselines are modest in some cases, and the evaluation remains limited to a single mesh geometry and a fixed catalog. The paper would be stronger with broader validation, clearer analysis of failure cases, and a more direct comparison against non-LLM architecture search methods.\n\nOverall, this is a timely and interesting paper that contributes a practical framework for combining domain priors with agentic model discovery in a medically relevant setting. Its main strength is the careful alignment of the search space with the underlying physics, which makes the LLM component much more credible than unconstrained generation. While still somewhat preliminary, the work points to a promising direction for personalized scientific modeling and clinical digital twins.",
+      "usage": {
+        "prompt_tokens": 10397,
+        "completion_tokens": 342,
+        "total_tokens": 10739,
+        "cost": 0.00933675
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891032-2W7LuGHOoLwhtEIhfZ4F",
+      "hash": "d8ba684c021dec9de914f2e45522e1d1376d77b8e5218695b98ebd221b3b8cc5",
+      "files": [
+        {
+          "filename": "2606.18154v1.pdf",
+          "file_hash": "2c65600d82d4cf7476f0b3c863764102a920ff1998c47f3ff974b4178ec72121"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18142v1",
+      "id": "997d89d8",
+      "timestamp": "2026-06-19T17:43:57.818332Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper makes a clear and timely contribution by moving animal-welfare evaluation from static text prompts into an agentic setting where models actually take actions. The TAC benchmark is thoughtfully designed: it tests a realistic travel-booking workflow, controls for price/rating/order confounds through augmentation, and uses programmatic scoring rather than an LLM judge. The central finding\u2014that all seven frontier models fall below the 64% chance baseline at default settings\u2014is striking and concerning, especially given 100% task completion rates. The additional welfare-aware system prompt is also informative, showing large gains for some models and much smaller gains for others, which supports the paper\u2019s claim that welfare-relevant behavior can be present but not reliably surfaced in default deployment.\n\nThat said, the paper\u2019s strongest results should be interpreted cautiously. The benchmark is still small, with only twelve base scenarios, and several analyses depend on scenario-level signals where the effective sample size is limited. The \u201cchance level\u201d baseline is also somewhat adversarial because the harmful option is intentionally constructed to be the strongest topical match, so below-chance performance reflects a mixture of welfare disregard and relevance optimization rather than a clean measure of animal-welfare preference. Similarly, the welfare-publicity correlation is interesting but correlational and based on only twelve scenarios, and the evaluation-awareness audit is narrow in scope. Overall, though, TAC is a valuable and well-motivated first step toward agentic welfare evaluation, and its governance framing makes it especially relevant for real-world deployment discussions.",
+      "usage": {
+        "prompt_tokens": 13550,
+        "completion_tokens": 305,
+        "total_tokens": 13855,
+        "cost": 0.011535
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891032-kTtlHmxJzeRLWhorWk5D",
+      "hash": "997d89d867d8c4563597a49c7cea09dd18e4ef1d87eb7070dbbd7dbdf340a7a7",
+      "files": [
+        {
+          "filename": "2606.18142v1.pdf",
+          "file_hash": "b8d4417b401ba52a1e90b6b3b3f4e6385c89d94e63e0768ea06422174e18045b"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18135v1",
+      "id": "37a9ef8b",
+      "timestamp": "2026-06-19T17:44:02.790473Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "The paper introduces C3GD, a useful and timely contribution to the sparse landscape of publicly available gunshot audio datasets. Its main strengths are scale, breadth, and unusually careful metadata: over 8,000 field-collected clips from 28 firearms across 16 calibers, recorded with multiple microphone types and locations. The authors also make a persuasive case for focusing on caliber classification rather than firearm model, since caliber is a more practical and generalizable target for acoustic learning. The discussion of prior datasets is informative, and the paper does a good job highlighting the limitations of internet-sourced audio and the importance of field-collected, well-annotated data.\n\nThat said, the paper is stronger as a dataset description than as an empirical study, since it does not yet provide benchmark results that would demonstrate how much the dataset improves performance on caliber classification or related tasks. The collection protocol is clear, but the controlled outdoor settings and relatively clean audio may limit immediate transfer to noisy urban deployment conditions, a limitation the authors acknowledge. Still, the paper\u2019s honesty about scope and generalizability is a positive feature. Overall, C3GD appears to be a valuable resource for researchers in gunshot detection and firearm acoustics, especially because it combines real-world collection with detailed metadata and open access scripts for preprocessing and feature extraction.",
+      "usage": {
+        "prompt_tokens": 6246,
+        "completion_tokens": 267,
+        "total_tokens": 6513,
+        "cost": 0.005886
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891036-wAOzs2BSH72Xs8OKXFVd",
+      "hash": "37a9ef8b33422718a8b2a5d20404440b76fb1723a634011e6298b30b3b2ef1d3",
+      "files": [
+        {
+          "filename": "2606.18135v1.pdf",
+          "file_hash": "88ac15e4b4e11f04baf88b451abbeba5e2c276e2377b9d5f0f540bccd30dafc5"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18132v1",
+      "id": "5c3086d6",
+      "timestamp": "2026-06-19T17:44:21.176903Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents a compelling and well-motivated attempt to address two real limitations of meta-reinforcement learning: the entanglement of task inference with embodiment-specific control, and the lack of reusable latent task knowledge across different robot morphologies. The core idea of learning task-level meta-knowledge on a simplified agent, regularizing it with a DPMM prior, and then transferring it through a semantic-magnitude interface is both novel and intuitively appealing. The experimental results on multiple MuJoCo embodiments are strong, especially the reported tracking improvements and reduced interaction cost, and the qualitative analyses of latent clustering and cross-agent transfer help support the paper\u2019s main claims.\n\nThat said, the method also relies on several assumptions that may limit its broader applicability. In particular, the framework seems tailored to locomotion-style tasks where task semantics can be cleanly abstracted into shared variables like position and velocity; it is less clear how well it would extend to manipulation, contact-rich, or visually grounded tasks where task semantics and embodiment are more tightly coupled. The use of a simplified agent, handcrafted abstract state remapping, and channel-specific semantic interfaces may also reduce the generality of the approach in practical settings. Overall, this is a strong and technically interesting paper with a clear contribution, but I would like to see more evidence of robustness beyond the locomotion domain and more discussion of how much task-specific engineering is required for deployment.",
+      "usage": {
+        "prompt_tokens": 30957,
+        "completion_tokens": 287,
+        "total_tokens": 31244,
+        "cost": 0.02450925
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891045-1EIH6MfUqr75gJnauw3C",
+      "hash": "5c3086d6ac8e7ffa9175c34e773098d6b1b738327a78191fa50ecd363f9a3624",
+      "files": [
+        {
+          "filename": "2606.18132v1.pdf",
+          "file_hash": "7b6ca94ec582f8b0faf16d5a7b92b31956389af11e1548673d3743ec86724a71"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18122v1",
+      "id": "91ad1031",
+      "timestamp": "2026-06-19T17:44:03.766396Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper offers a clear and useful systems-level overview of embedded machine learning for microcontroller-class devices. Its main strength is that it goes beyond generic TinyML introductions and emphasizes the engineering realities that determine whether a model is actually deployable: sampling, buffering, feature extraction, validation splits, runtime scheduling, memory limits, and post-processing logic. The two running examples\u2014motion recognition and keyword spotting\u2014are well chosen because they show how different sensing modalities still share the same core pipeline. The paper is especially effective in framing feature extraction as compression and in stressing that accuracy alone is not a sufficient deployment metric on edge hardware.\n\nThe paper is also practical in its design rules and deployment guidance, particularly the advice to version the full pipeline, validate under realistic variation, and treat latency, RAM, flash, and energy as first-class evaluation criteria. That said, the work reads more like a concise technical tutorial or perspective piece than a research paper with new experimental results. It would be stronger if it included more empirical comparisons, such as measured latency/memory/energy trade-offs across several representative microcontrollers or a deeper case study showing how the proposed principles change outcomes in practice. Even so, as a deployment-oriented synthesis, it is well written, coherent, and valuable for practitioners and students entering embedded ML.",
+      "usage": {
+        "prompt_tokens": 11324,
+        "completion_tokens": 261,
+        "total_tokens": 11585,
+        "cost": 0.0096675
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891037-v0Fa97uP13e69EOSFuAe",
+      "hash": "91ad1031e19676eaddff0801b76c62483ee68b1fbb2d17781baac66f88ec7d62",
+      "files": [
+        {
+          "filename": "2606.18122v1.pdf",
+          "file_hash": "85d7b6f9a1823da004b5871bfd4271f4d55ba7290893bbf34dc592060fb79d0b"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18120v1",
+      "id": "7241c7e0",
+      "timestamp": "2026-06-19T17:44:04.185095Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper makes a clear and practical security point: Handlebars\u2019 default double-brace escaping is not a general defense for LLM prompts, but only for delimiter schemes whose critical characters happen to overlap with HTML escaping. The model-free analysis is especially strong because it isolates the mechanism cleanly: angle-bracket families are neutralized, while bracket-, colon-, and Markdown-based families survive intact. That is a useful contribution for prompt-template developers, especially in frameworks like Semantic Kernel where Handlebars is the default. The paper is well motivated, the threat model is realistic, and the distinction between \u201cHTML safety\u201d and \u201cprompt safety\u201d is articulated convincingly.\n\nThe empirical evaluation broadly supports the argument, and the combination of static survival analysis with end-to-end attack trials is a nice design choice. The results also show an important nuance: escaping only helps when the model is already vulnerable enough for structural framing to matter, and even then only for the delimiter families it actually disrupts. That said, the study\u2019s scope is somewhat narrow: it focuses on one templating engine, one flattened prompt construction pattern, and a limited set of models and attack objectives. Some statistical choices and the reuse of identical prompts across repetitions also leave room for caution in interpreting fine-grained significance claims. Overall, though, this is a strong and timely paper with a crisp takeaway: escaping is worth keeping, but it should not be mistaken for a real structural defense against prompt injection.",
+      "usage": {
+        "prompt_tokens": 12595,
+        "completion_tokens": 296,
+        "total_tokens": 12891,
+        "cost": 0.01077825
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891039-KaLNPk2afXzVA1Xkjofj",
+      "hash": "7241c7e01bead17c1a9274b8e0b87d182a8dc22474138dd63cff04452d42b6a3",
+      "files": [
+        {
+          "filename": "2606.18120v1.pdf",
+          "file_hash": "73aa0f8ee828e83c79decfc9f69fd9365ac311c57d033bf22b47b7dbc51f599a"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18114v1",
+      "id": "4094d80d",
+      "timestamp": "2026-06-19T17:44:09.349258Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper makes a compelling case that ternary quantization for selective state space models is much more practical than prior work suggested. The main strength is the shift from expensive from-scratch training to quantization-aware training from a pretrained Mamba-2 checkpoint, which dramatically reduces the token and compute budget while still reaching competitive zero-shot performance. The results are well-motivated, especially the clear demonstration that naive post-training quantization fails catastrophically and that recurrence in SSMs makes Transformer-style output correction ineffective. I also found the identification of \u201czero-ratio collapse\u201d to be a useful and interesting stability finding, with a convincing explanation for why fixed absmean scaling works better than learnable scales.\n\nThat said, the paper is also somewhat narrow in scope and leaves several important questions open. All experiments are limited to a single architecture, a single model scale, English-only data, and relatively short context lengths, so the broader generality of the approach remains uncertain. The headline compression gains are also somewhat more about storage than realized inference speed, since no custom ternary kernel is provided and the current implementation is not memory-efficient at runtime. Finally, the performance remains below FP16, and the claims about scaling toward parity are based on limited data points, so those projections should be treated cautiously. Overall, this is a strong and timely paper with solid empirical evidence and a clear systems perspective, but it would be strengthened by wider validation and a more concrete path to efficient deployment.",
+      "usage": {
+        "prompt_tokens": 10817,
+        "completion_tokens": 298,
+        "total_tokens": 11115,
+        "cost": 0.00945375
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891043-aIJXyxr2RWerF87033rD",
+      "hash": "4094d80d7e1ed50ff1da6674ea93ded6590b5bf2785024a6fe12c01e4c560029",
+      "files": [
+        {
+          "filename": "2606.18114v1.pdf",
+          "file_hash": "02d47a7c56b691d98d3124b363379d6e1d7a64637810a4cc44917883e4c0ccf8"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18101v1",
+      "id": "ca6445b5",
+      "timestamp": "2026-06-19T17:44:11.203364Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper addresses an important and practical problem in GUI grounding: how to make on-policy self-distillation more reliable when the model must generate precise coordinates in high-resolution screenshots. The core idea is well motivated and nicely tailored to the task. In particular, the authors identify a real weakness of naive OPSD\u2014teacher signals can become misleading once the student has drifted into an incorrect coordinate prefix\u2014and propose a sensible fix using spatial verifiability. The combination of soft correctness-aware gating and teacher-probability scaling is a clear contribution, and the empirical results across six benchmarks are strong. I also appreciate the ablation studies, which support the claim that the two components are complementary rather than individually sufficient.\n\nThat said, the method is somewhat specialized and depends on access to ground-truth bounding boxes and a task format with explicitly verifiable coordinates, which limits its generality. The paper does acknowledge this, but the broader implications for non-spatial or weakly supervised settings remain unclear. Another concern is that the approach adds several heuristic design choices, such as the gating thresholding scheme and the scaling coefficient \u03bb, and although the authors tune these carefully, the method may require task-specific calibration. Overall, this is a solid and convincing paper with a well-targeted technical contribution, strong experimental validation, and a useful insight: in self-distillation, teacher quality matters, and for GUI grounding it can be assessed directly rather than only indirectly through confidence proxies.",
+      "usage": {
+        "prompt_tokens": 13649,
+        "completion_tokens": 292,
+        "total_tokens": 13941,
+        "cost": 0.01155075
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891044-V07v7wR0XasG7bbrcf6Z",
+      "hash": "ca6445b52239eb503e2242ab4e0cab2ebe36acaf6b68b175de9c91c09361e43b",
+      "files": [
+        {
+          "filename": "2606.18101v1.pdf",
+          "file_hash": "ea4edf619ec481b2c837bb6a6146f384242d51e11379803bbb753c7c34c28524"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18098v1",
+      "id": "009b5053",
+      "timestamp": "2026-06-19T17:44:17.585989Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents a timely and practical contribution at the intersection of formal verification and AI-assisted theorem proving. Its main strength is the systems-level improvement over the original IsabeLLM: the addition of retrieval-augmented generation, Nitpick-based counterexample feedback, and an error trace is well motivated and clearly aimed at addressing the failure modes of LLM-assisted proof search. The evaluation is also compelling in scope for a proof-assistant integration paper, comparing multiple modern models and showing consistent gains in success rate and proof efficiency, especially with Chimera and Nemotron. The paper\u2019s blockchain consensus application is relevant and concrete, and the move from a binary-tree to an n-ary-tree consensus model makes the verification task more realistic and demonstrably harder.\n\nThat said, the paper still has some limitations that temper the strength of the claims. The consensus model is intentionally simplified, relying on majority honesty, synchrony, and constant difficulty, so the result is more a proof-of-concept for automated theorem proving than a verification of Bitcoin PoW in its full operational complexity. The empirical evaluation is also somewhat narrow: it focuses on 16 lemmas from a single formalization, with relatively few attempts and a strong dependence on prior proofs in the RAG database, so it is difficult to judge how much the approach generalizes beyond this benchmark. Even so, the paper is a solid and well-executed contribution, and it convincingly shows that better context management and proof feedback can materially improve LLM-assisted formal verification in Isabelle.",
+      "usage": {
+        "prompt_tokens": 18172,
+        "completion_tokens": 308,
+        "total_tokens": 18480,
+        "cost": 0.015015
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891047-TdLkgkzZeRXKjWmNFfs4",
+      "hash": "009b5053203b0007f3cbc8377f50f560d2c0051a185f54e00679662f4dc100de",
+      "files": [
+        {
+          "filename": "2606.18098v1.pdf",
+          "file_hash": "b8abac57bdb9edf04e9a2488817c450052f8e2633c3dcf4e7bdbb8ac5af4c0a5"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18096v1",
+      "id": "3f46ef69",
+      "timestamp": "2026-06-19T17:44:18.766690Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents a timely and practical contribution to the model-compression literature by targeting Structured State Space Models (S4 and S4D), which have received far less pruning attention than transformers or CNNs. The main idea\u2014operator-level, channel-wise structured pruning with interleaved fine-tuning\u2014is well motivated by the architecture of SSMs, where channels correspond to independent operators that can be removed without breaking tensor semantics. The experimental results are encouraging: across four benchmarks, the authors show that moderate pruning often preserves accuracy while delivering substantial latency reductions on real hardware, and in some cases even improves performance. The depth-aware allocation strategy is also a sensible insight, supported by the layer-wise ablations showing that earlier layers are more sensitive than deeper ones.\n\nThat said, the paper would benefit from a more rigorous comparison against stronger baselines and more detailed analysis of why random channel selection works so well. Since the method relies on random seeds plus fine-tuning rather than importance scoring, it is somewhat surprising that it can match or outperform more principled selection schemes, and the paper would be stronger with statistical tests, ablations on fine-tuning duration, and a clearer accounting of pruning search cost. The reported latency gains are useful and deployment-relevant, but the parameter reductions are relatively modest in some settings, so a deeper discussion of hardware dependence and practical acceleration limits would help. Overall, this is a solid and original systems-oriented paper with clear empirical value, though its claims would be more convincing with broader baselines and deeper methodological justification.",
+      "usage": {
+        "prompt_tokens": 9664,
+        "completion_tokens": 310,
+        "total_tokens": 9974,
+        "cost": 0.008643
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891050-OCZBDEzFwiNKmJBayEia",
+      "hash": "3f46ef69cb17e6052da568dec682e14575cc4a6777126753abab57928ccf3231",
+      "files": [
+        {
+          "filename": "2606.18096v1.pdf",
+          "file_hash": "b0dd8001f13cfb1eb233d0fe8dc5a6e726c269ef9dd08964a7ccee62eab27bc9"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18092v1",
+      "id": "6a8db91d",
+      "timestamp": "2026-06-19T17:44:25.780379Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "EAGG makes a clear and timely contribution to cross-end-effector grasp generation by tackling a real weakness in prior work: most methods either assume a fixed gripper/hand or treat embodiment as a static label. The paper\u2019s core idea\u2014combining a topology-aware end-effector graph with an embodiment-specific low-dimensional control basis, plus iterative geometry injection during sampling\u2014is well motivated and technically coherent. In particular, the argument that grasp feasibility depends not just on object geometry but on how the embodiment\u2019s articulation evolves during closure is convincing, and the method is nicely aligned with that observation. The experimental results are strong: the unified model stays close to specialized training on the six training end effectors, and the transfer results on finetuning and zero-shot embodiments suggest the representation is genuinely reusable rather than merely overfit to the training set.\n\nThat said, the paper is somewhat less convincing on whether all of its complexity is necessary. The architecture has many moving parts\u2014PCA control bases, graph conditioning, a frozen cognition backbone, and iterative refreshing\u2014which makes the method harder to interpret and reproduce than simpler alternatives. While the ablations show that graph conditioning and dynamic geometry matter, some reported metrics are mixed across embodiments, and the efficiency table suggests a nontrivial computational cost relative to lighter baselines. The real-world results are encouraging and help validate the simulation story, but the hardware set is still limited. Overall, this is a strong and well-executed paper with a thoughtful representation design and solid empirical evidence, though its practical adoption may depend on whether the gains justify the added implementation complexity.",
+      "usage": {
+        "prompt_tokens": 26440,
+        "completion_tokens": 322,
+        "total_tokens": 26762,
+        "cost": 0.021279
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891054-J41fj7cRCQHmewCBh7z7",
+      "hash": "6a8db91da9217fc47a27c1d5cebf7015868892569b67539f25ae523f7185a13b",
+      "files": [
+        {
+          "filename": "2606.18092v1.pdf",
+          "file_hash": "701405606dc95254f2d94bd1a305d82cf749de876b293bed12c91f167005c413"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18075v1",
+      "id": "a59ed677",
+      "timestamp": "2026-06-19T17:44:28.546968Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper makes a compelling case for bridging the long-standing gap between context-centric and relation-centric Graph RAG systems. Its main contribution, HyGRAG, is well motivated: instead of treating chunks and entities as separate retrieval targets, it builds a hybrid graph, clusters it hierarchically, and generates community summaries intended to fuse contextual and relational information into a new abstraction. The retrieval design is also thoughtful, combining community, chunk, entity, and relation evidence in a structured prompt. Empirically, the paper reports strong gains across factual QA, reading comprehension, and multi-hop reasoning, with especially notable improvements on challenging multi-hop benchmarks and with reasonable online efficiency. The inclusion of dynamic update support is another practical strength, since many RAG systems remain too static for real deployments.\n\nThat said, the paper also has some limitations and open questions. The framework is fairly complex, with multiple heuristics and components\u2014LSH clustering, summary generation, entity expansion, relation filtering, and attachment-based updates\u2014making it difficult to isolate which parts matter most in different settings. The approach relies heavily on LLM-generated summaries and triplet extraction, which introduces potential hallucinations and quality drift; the appendix acknowledges this, but the impact on retrieval reliability deserves deeper analysis. In addition, while the results are promising, the gains are strongest on certain multi-hop tasks, and the method is less clearly superior on reading comprehension, suggesting that \u201cunified\u201d retrieval may not always be universally optimal. Overall, HyGRAG is a strong and timely contribution that advances graph-based RAG toward more integrated reasoning, but the paper would benefit from a clearer discussion of failure modes, annotation/extraction noise, and the cost-benefit tradeoffs of such a sophisticated pipeline.",
+      "usage": {
+        "prompt_tokens": 22030,
+        "completion_tokens": 351,
+        "total_tokens": 22381,
+        "cost": 0.018102
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891058-VF7PsLnDZhRc8O22wZ3d",
+      "hash": "a59ed677864f9a26b28b533c42cd5aff0b2fbe441f83457205b91189a9f6ba07",
+      "files": [
+        {
+          "filename": "2606.18075v1.pdf",
+          "file_hash": "d929ae1c81fd61bb43815cd15377777a74387b088aa0844eac83d59bf5cefa67"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18068v1",
+      "id": "56ad725d",
+      "timestamp": "2026-06-19T17:44:25.812995Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper tackles an important and timely problem: how to make LLM-based clinical agents less likely to hand off prematurely and less likely to produce unsafe hallucinated outputs. The proposed solution is appealing in principle because it shifts control from purely prompt-based behavior to a more deterministic orchestration layer, combining an OLDCARTS completeness gate with semantic-entropy-based uncertainty screening. The system design is clear, modular, and well motivated, and the ablation study does suggest that the full architecture improves diagnostic accuracy relative to an unconstrained baseline. The finding that greater symptom completeness correlates with lower downstream uncertainty is also a useful and intuitive result that supports the paper\u2019s central thesis.\n\nThat said, the paper\u2019s strongest limitation is that the evaluation remains highly synthetic and automated. The use of simulated patient agents, MedQA-derived vignettes, and a ClinicalJudge LLM means that the reported gains may reflect interaction artifacts rather than robust clinical improvement. In particular, the fact that the intake gate alone hurts accuracy while the combined system helps raises questions about whether the improvement comes from the framework itself or from the added context and multi-sampling effects. The paper would be stronger with clinician evaluation, calibration/false-negative analysis, and clearer evidence that the uncertainty gate actually reduces harmful hallucinations rather than simply filtering disagreement. Overall, this is a thoughtful and technically interesting systems paper with a practical safety-oriented contribution, but its clinical claims should be viewed as preliminary until validated in more realistic settings.",
+      "usage": {
+        "prompt_tokens": 16469,
+        "completion_tokens": 296,
+        "total_tokens": 16765,
+        "cost": 0.01368375
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891059-vcz8S7oyrNewrDf7DNjm",
+      "hash": "56ad725de0223bc388e87ed85248e5726046b54db97a959218b5a3685651445c",
+      "files": [
+        {
+          "filename": "2606.18068v1.pdf",
+          "file_hash": "8a37ccc310ba92e8723b4ac694455b1421010ccab9e97470267a736d12dd6da8"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18063v1",
+      "id": "94b60b8f",
+      "timestamp": "2026-06-19T17:44:30.190184Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents an interesting and timely idea: using LLMs not as direct medical image classifiers, but as generators of clinically grounded feature-extraction code. That reframing is compelling, especially for low-data medical settings like scar classification, where end-to-end deep learning is prone to overfitting and where interpretability and privacy matter. The proposed ScaFE pipeline is well motivated, and the alignment with established clinical scales such as VSS and POSAS gives the method a credible medical foundation. The experimental results are encouraging, with ScaFE outperforming several deep learning baselines and a direct multimodal LLM approach on a very small dataset. I also appreciate the authors\u2019 emphasis on deterministic, locally executable code, which addresses two practical concerns in clinical AI: reproducibility and patient-data privacy.\n\nThat said, the paper\u2019s strongest claims should be interpreted cautiously. The dataset is extremely small, with only 40 images, so the reported gains may be sensitive to fold splits, class imbalance, or feature leakage. The use of a clinical expert to validate the prompt design is a strength, but the generated features still seem to rely heavily on fairly conventional handcrafted descriptors, so it is not fully clear how much value the LLM adds beyond automating feature engineering. The \u201cclinical composite\u201d feature also appears somewhat ad hoc and could benefit from a more rigorous definition. Overall, this is a promising proof of concept that offers a useful direction for data-scarce medical imaging, but stronger validation on larger, multi-center datasets and more careful comparison against strong classical baselines would be needed before the approach could be considered broadly reliable.",
+      "usage": {
+        "prompt_tokens": 13341,
+        "completion_tokens": 328,
+        "total_tokens": 13669,
+        "cost": 0.01148175
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891061-Mh5b2cAtICwmhRdeznZK",
+      "hash": "94b60b8ff241d1fead0fbfd35ce0524cfe4bfdbb5cb270f828db6c599372e70a",
+      "files": [
+        {
+          "filename": "2606.18063v1.pdf",
+          "file_hash": "0de8f53784ae0ed478b2b195d9b705e6326f363643b16ae30a0030cbe8452274"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18033v1",
+      "id": "d29fd79a",
+      "timestamp": "2026-06-19T17:44:36.016133Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper tackles an important and timely question in multilingual NLP: whether the heuristics that worked for cross-lingual transfer in supervised fine-tuning still hold for cross-lingual in-context learning (ICL). Its main strength is the breadth of the empirical study: seven tasks, six models, and 18 typologically diverse languages, along with analyses of linguistic similarity, internal alignment, script, and resource level. The central findings are striking and well supported by the presented evidence\u2014especially the claim that English is often a poor source language in ICL, that target languages are frequently not their own best source, and that low-resource, non-Latin-script languages can be unexpectedly effective donors. These results challenge a common assumption in the field and make a strong case that source-language selection in ICL is governed by different mechanisms than in fine-tuning.\n\nThe paper is also careful in its analysis of language confusion for generative settings, which broadens the contribution beyond classification-style transfer. I appreciate the attempt to connect performance patterns with both typological features and model-internal alignment, and the finding that representation-space alignment is more predictive than surface similarity is a useful insight. That said, the work remains largely correlational, so some of the more interpretive claims about why low-resource languages work better as sources would benefit from more mechanistic validation. The study is also limited to relatively small models and a restricted language set chosen for benchmark overlap, which is understandable but does constrain generalizability. Overall, this is a strong, well-motivated paper with clear practical implications and a valuable challenge to existing intuition in multilingual prompting.",
+      "usage": {
+        "prompt_tokens": 12963,
+        "completion_tokens": 329,
+        "total_tokens": 13292,
+        "cost": 0.01120275
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891066-ojqUJtIS0nkh4TmlMww9",
+      "hash": "d29fd79a50632a3afbc2271175163ffe738ba1d49388c25e872784c03baa4cc3",
+      "files": [
+        {
+          "filename": "2606.18033v1.pdf",
+          "file_hash": "2652fb08c9720005766750d85c7b10feca82dad5e1cdff6e606561d062e1e65c"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18024v1",
+      "id": "ee358278",
+      "timestamp": "2026-06-19T17:44:31.610092Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents a clear and mathematically elegant NTK-based account of catastrophic forgetting, shifting the focus from parameter drift to output-space interference. Its main strength is the closed-form forgetting predictor, which is both theoretically appealing and empirically convincing in the frozen-backbone linear-head setting, where it becomes exact. I also found the low-rank \u201cvulnerable subspace\u201d perspective useful: it gives a concrete mechanism for why forgetting is concentrated in only a few output directions, and the Kronecker scaling rule is a nice structural insight that helps unify shared-head continual learning behavior across model sizes and task counts. The experiments are well aligned with the theory, especially the drift decomposition results showing that spectral regularization targets the vulnerable modes far more selectively than EWC or replay.\n\nThat said, the paper\u2019s strongest claims are also its most assumption-heavy. The exactness of the predictor depends on an analytically convenient regime, and for nonlinear adapters, full fine-tuning, cross-entropy, or long task sequences, the result becomes more of a local approximation or heuristic than a general theory. The empirical gains of spectral regularization are persuasive, but the method itself feels more like a proof-of-concept derived from the theory than a broadly validated continual learning algorithm. Overall, this is a strong and insightful paper with a crisp mechanistic contribution, but its practical impact will depend on whether the low-rank function-space picture continues to hold outside the NTK/frozen-feature regime.",
+      "usage": {
+        "prompt_tokens": 14521,
+        "completion_tokens": 298,
+        "total_tokens": 14819,
+        "cost": 0.01223175
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891066-RScfuzUkAVvwucOVv9ba",
+      "hash": "ee358278ce819190d8d0794d54513c1d89bf693dabe4e596abe6496950f08c2f",
+      "files": [
+        {
+          "filename": "2606.18024v1.pdf",
+          "file_hash": "d81617fdb8a650e70c74054efd5441b48c0e5f93fbd60b2a6943fee924ae5706"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18021v1",
+      "id": "a52b57b3",
+      "timestamp": "2026-06-19T17:44:32.897769Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "LegalHalluLens is a timely and well-motivated paper that tackles a real gap in legal AI evaluation: aggregate hallucination rates are too blunt to guide deployment decisions. The typed taxonomy is intuitive and useful, and the Risk Direction Index is a nice attempt to compress omission-vs-invention asymmetry into a practical scalar. I also appreciate the scale of the benchmark and the emphasis on oracle-bounded contract extraction, which makes the findings easier to interpret than many open-ended legal QA settings. The key empirical result\u2014that similarly performing models can have very different failure profiles\u2014is persuasive and important for compliance-oriented applications.\n\nThat said, the paper leans heavily on a single LLM judge, which raises concerns about label stability and potential judge bias, especially because many claims hinge on fairly fine-grained distinctions like missing vs. extra conditions. The mapping from CUAD clause types into four broad categories is sensible, but also somewhat coarse, and some reported gains may depend on the specifics of this taxonomy and the selected subset used for mitigation. The debate pipeline results are promising, though the strongest improvement appears to come from filtering fabricated outputs rather than genuinely correcting extraction content, so the practical value may be more limited than the headline suggests. Overall, this is a strong and useful paper with clear deployment relevance, but I would like to see more human validation, broader cross-domain testing, and ablations that isolate which parts of the debate system actually matter most.",
+      "usage": {
+        "prompt_tokens": 16937,
+        "completion_tokens": 291,
+        "total_tokens": 17228,
+        "cost": 0.01401225
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891066-TZhBi6QSt9qrc0GiZVc8",
+      "hash": "a52b57b3344352df0d16570e6b10edc89d60d14743b858503c65b3d4fba3676b",
+      "files": [
+        {
+          "filename": "2606.18021v1.pdf",
+          "file_hash": "66fc410ac870dda22a09d8656846fd6d29c406d5a3c49a8403b668f4e5dea487"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18005v1",
+      "id": "69a360cf",
+      "timestamp": "2026-06-19T17:44:34.249245Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper offers a timely and well-motivated conceptual contribution by framing LLMs as decision-makers in consumer markets and proposing \u201cLLM Consumer Behavior Theory\u201d as a new research field. Its main strength is synthesis: the authors connect classical utility theory, behavioral economics, and recent NLP work into a coherent framework that is easy to understand and relevant to both economists and AI researchers. The paper is especially effective in identifying the key stages of agentic consumption\u2014preference reflection, user-agent alignment, and market aggregation\u2014and in showing why standard assumptions like stable preferences, rationality, and heterogeneity may break down when consumption is delegated to LLM-based agents.\n\nAt the same time, the paper is primarily a position/foundational piece rather than an empirical study, so its claims remain largely programmatic. While this is appropriate for introducing a new field, the argument would benefit from sharper formal definitions and more concrete examples of how the proposed framework generates testable hypotheses. In particular, some of the discussion on homogenization, alignment, and hybrid markets is compelling but still somewhat speculative. Overall, the paper succeeds as a clear and ambitious agenda-setting contribution, and it should be valuable for researchers interested in consumer theory, recommender systems, and agentic AI, though future work will need to validate and operationalize its concepts empirically.",
+      "usage": {
+        "prompt_tokens": 8564,
+        "completion_tokens": 269,
+        "total_tokens": 8833,
+        "cost": 0.0076335
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891068-6uUphXf4SqXEhG7b3Bju",
+      "hash": "69a360cf293acb60f478625790462c5197f3e08c5c0e1a8726a38aaef6408b40",
+      "files": [
+        {
+          "filename": "2606.18005v1.pdf",
+          "file_hash": "41d09759015b1fadbcf90e52a30b13857c87e0cbf1bccd1856efb5b84f379a71"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18003v1",
+      "id": "92b611ca",
+      "timestamp": "2026-06-19T17:44:37.776599Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper tackles an important and timely problem: how to do federated learning in mobile collective adaptive systems where data is both spatially heterogeneous and temporally drifting as devices move. The main contribution, C\u00b2FL, is conceptually strong because it combines clustered federated learning with continual learning, using decentralized clustering, replay, and an adaptive averaging rule to balance local adaptation and regional consensus. The paper is also well motivated and clearly framed around realistic applications such as vehicular sensing, drones, and crowdsensing. The system model and algorithmic design are presented in a structured way, and the connection to spatially organized non-IID data is especially compelling.\n\nThe experimental results support the core claim that mobility can cause catastrophic forgetting in decentralized clustered FL, and that the proposed replay-plus-averaging strategy improves retention and cumulative accuracy. That said, the evaluation is somewhat limited in scope: it relies on synthetic spatial partitions over EMNIST, with a relatively simple mobility pattern and a strong assumption of perfectly distinct regions. The use of an unbounded replay buffer also makes the continual-learning component less practical, so it would be useful to see bounded-memory variants and more realistic drift scenarios. Overall, this is a promising and well-argued paper with a clear systems contribution, but its empirical validation would be stronger with more realistic benchmarks, broader baselines, and an analysis of communication and memory costs.",
+      "usage": {
+        "prompt_tokens": 18368,
+        "completion_tokens": 281,
+        "total_tokens": 18649,
+        "cost": 0.0150405
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891070-g9lmvg6Do6RaQmadhIi5",
+      "hash": "92b611cacc44a00451dc1fa4486d8fcc9119fa4375ec2b247274d0a2d860f7bb",
+      "files": [
+        {
+          "filename": "2606.18003v1.pdf",
+          "file_hash": "b324b754905051b4c7cee7f17cc95edc8ec977e0f18626ffc1b1b1f00a687f16"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.18000v1",
+      "id": "be0acc80",
+      "timestamp": "2026-06-19T17:44:37.569040Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper makes a timely and well-motivated contribution to autonomous optical network management by introducing what it claims is the first T-API-compliant ReAct agentic loop. Its main strength is the clean experimental design: the authors hold the agent and scenario suite fixed while varying only the tool abstraction layer, allowing them to isolate a question that is often glossed over in LLM-for-networks work. The comparison between generic HTTP/RESTCONF tools and domain-specific T-API tools is particularly compelling, and the reported results are strong: composite tools substantially improve correctness and reduce token usage, with the best setup reaching roughly 90% pass rate and about a threefold token reduction. The paper also stands out for using an automated oracle rather than relying solely on subjective judging, and for including a meaningful breakdown of failure types.\n\nThat said, the paper would benefit from a more cautious interpretation of the results and a fuller discussion of limitations. The evaluation is fairly narrow in scope: it uses one digital-twin environment, a single topology, and a limited set of scenarios, so it remains unclear how well the conclusions generalize to other network sizes, vendors, or operational conditions. In addition, the advantage of domain-specific tools may partly reflect how much logic is moved from the LLM into deterministic tool wrappers, which is useful in practice but makes it harder to disentangle agent intelligence from orchestration assistance. Even so, the work is technically solid and practically relevant, and it provides a useful benchmark and design direction for future telecom agents. Overall, I would view this as a strong and well-executed systems paper with clear implications for tool design in network automation.",
+      "usage": {
+        "prompt_tokens": 7328,
+        "completion_tokens": 336,
+        "total_tokens": 7664,
+        "cost": 0.007008
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891071-gmUgyryzuDFHzmCDJ9dm",
+      "hash": "be0acc80b31b289c239737759084fb7abe5847cb262f3e5a9bbf7da7cd225924",
+      "files": [
+        {
+          "filename": "2606.18000v1.pdf",
+          "file_hash": "5a319139e8b6c2849a4b6912c5be8d594b810895862cbb6ae8dfbb4e5c0143cc"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17996v1",
+      "id": "0f3dda36",
+      "timestamp": "2026-06-19T17:44:39.898899Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents McWC, a long-term time series forecasting model that explicitly decomposes the problem into cyclical patterns, inter-channel correlations, and trend components. The main idea is appealing and well-motivated: rather than relying on a single backbone to implicitly learn everything, the authors introduce a multi-cycle construction block, a channel-correlation extraction block, and a multi-level wavelet decomposition backbone. The emphasis on channel correlations is a useful addition, since many recent LTSF methods are still effectively channel-independent. The paper is also strengthened by a clear architectural narrative and by ablation studies showing that each module contributes to performance.\n\nThe experimental results are generally convincing. McWC reports strong accuracy across six standard benchmarks and shows particularly good computational efficiency compared with several recent baselines. The look-back-window study is a nice touch, as it supports the claim that the model benefits from longer historical context. That said, the paper could do more to justify some design choices, especially the use of prior periodic information and the manually set scaling factor in the channel module. It would also help to include more discussion of failure cases, sensitivity to hyperparameters, and whether the gains persist on less regular or noisier datasets. Overall, this is a solid and timely contribution with a practical efficiency advantage, though some methodological details would benefit from deeper validation.",
+      "usage": {
+        "prompt_tokens": 11379,
+        "completion_tokens": 270,
+        "total_tokens": 11649,
+        "cost": 0.00974925
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891073-YP2ULLZW5wXuPbd5OQNT",
+      "hash": "0f3dda36c1d40839b7c4072e7087c6800099b253adf188e59fab2b078374a7b8",
+      "files": [
+        {
+          "filename": "2606.17996v1.pdf",
+          "file_hash": "babf38be930721e760d21e938253d447f90f9a25abca268ac1e81dde9160fa24"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17989v1",
+      "id": "6553ba61",
+      "timestamp": "2026-06-19T17:44:45.309497Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents a thoughtful and timely contribution to 3D MRI reconstruction and cross-contrast synthesis, especially in the context of latent-space generative modeling where compression quality strongly shapes downstream performance. The central idea\u2014\u201crecover semantics first, generate better\u201d\u2014is well motivated and clearly grounded in real shortcomings of current VAE/VQ-style pipelines: loss of long-range anatomical coherence, semantic entanglement across contrasts, and oversmoothing from pixel-wise objectives. The proposed combination of a Latent Harmonization Encoder, Semantic Recovery Block, and Anatomy-aware Frequency Loss is coherent and technically reasonable, and the use of a self-supervised DINO teacher is a nice practical choice for injecting higher-level structure into the latent space. The empirical results on BraTS and IXI are solid, with consistent gains in reconstruction and translation quality, and the ablations support the claim that each component contributes meaningfully.\n\nThat said, the paper\u2019s improvements are somewhat incremental in absolute terms for reconstruction, and part of the synthesis gains appear to come from strengthening the latent representation rather than introducing a fundamentally new generative model. The two-stage setup makes this distinction explicit, which is good, but it also means the method\u2019s impact depends on the quality of the downstream translator and may be less directly transferable across architectures than a more end-to-end approach. I also would have liked more analysis of computational overhead, sensitivity to the teacher choice, and robustness across scanners or more diverse clinical cases. Overall, though, this is a well-executed paper with a clear message, convincing experiments, and a useful practical lesson: improving latent semantics can materially improve 3D medical image generation.",
+      "usage": {
+        "prompt_tokens": 11838,
+        "completion_tokens": 332,
+        "total_tokens": 12170,
+        "cost": 0.0103725
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891076-uejr0ASKWDc4BTIqwfBc",
+      "hash": "6553ba61b236aa8a753bbf3f733e93d84948a2930a4e0b17f703d640d242431c",
+      "files": [
+        {
+          "filename": "2606.17989v1.pdf",
+          "file_hash": "e9a504aeccfece46edba400a73d162b702f0b230f9fed502fab29e5e873127b6"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17979v1",
+      "id": "10f327fb",
+      "timestamp": "2026-06-19T17:44:41.764046Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents a clear and timely idea: instead of treating image-level reward as uniformly applicable across all diffusion steps and spatial regions, it reallocates that reward using the model\u2019s own text-image attention signals. That is a strong conceptual fit for text-to-image RL post-training, where credit assignment is naturally spatiotemporal but most current methods remain scalar. The method is appealingly simple, lightweight, and broadly compatible with existing attention-based backbones. I also found the experimental story convincing at a high level: STAR consistently improves over Flow-GRPO on GenEval, OCR, and PickScore, and the ablation on attention-layer choice and computational overhead helps support the practicality of the approach.\n\nThat said, the paper would benefit from a deeper analysis of why the attention-derived allocation is the right proxy for reward responsibility. Attention maps are often informative, but they are not always faithful explanations of model causality, so the method may inherit the limitations of attention as a localization signal. The gains are also evaluated primarily against one strong baseline and on a relatively narrow set of benchmarks; it would be helpful to see more comparison to alternative dense-credit or reward-routing strategies, as well as stronger evidence that the method generalizes across architectures and reward models. Overall, this is a solid and well-motivated contribution with good empirical results, though its main weakness is that the causal justification for attention-based reward routing remains somewhat underdeveloped.",
+      "usage": {
+        "prompt_tokens": 15112,
+        "completion_tokens": 289,
+        "total_tokens": 15401,
+        "cost": 0.0126345
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891076-RGSDxaguhBJQHq01fOhI",
+      "hash": "10f327fbc1674962a3ae15968d5dfebdc197702b6816fa292e62b7a7de093fb4",
+      "files": [
+        {
+          "filename": "2606.17979v1.pdf",
+          "file_hash": "2a7974549dc3eb35511db8c5b162c1ebd90b76338a9a28b19eda497b501ab93a"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17978v1",
+      "id": "8cbc4a61",
+      "timestamp": "2026-06-19T17:44:56.477211Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "MoCo-AIS makes a strong and timely contribution to the trajectory-similarity literature, especially for maritime AIS data where irregular sampling, noisy observations, and long-range voyage structure make classical methods expensive and brittle. Its main strength is not only the use of momentum contrast for self-supervised learning, but the fact that it wraps multiple encoder families into a unified benchmarking framework. This makes the paper more valuable than a single-model proposal: it offers a fairer way to compare RNNs, TCNs, and Transformers under the same augmentations, losses, and evaluation protocol. The empirical results are convincing in showing that learned embeddings can achieve excellent retrieval performance while dramatically reducing computation time relative to DTW and Hausdorff. The cross-regional experiments are also a nice addition, since they test generalization beyond a single geography and highlight that some architectures are more robust than others.\n\nThat said, the paper has a few limitations. The evaluation still relies heavily on retrieval of augmented views, which is useful for representation quality but does not fully demonstrate downstream utility on tasks such as anomaly detection, clustering, or route prediction. The comparison with geometric similarity also remains somewhat unresolved: the authors acknowledge that learned similarity diverges from DTW/Hausdorff rankings, but the practical implications of that divergence could be explored more deeply. In addition, some results suggest that performance is highly sensitive to the backbone and region, with Transformers sometimes best in same-region retrieval but weaker under distribution shift. Overall, this is a well-executed and carefully positioned paper with solid engineering and clear experimental value, though it would be strengthened by broader downstream evaluation and a deeper analysis of when learned similarity should be preferred over traditional distance-based definitions.",
+      "usage": {
+        "prompt_tokens": 20170,
+        "completion_tokens": 345,
+        "total_tokens": 20515,
+        "cost": 0.01668
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891086-KQcnJj3ikRVT21QT4yoy",
+      "hash": "8cbc4a61e483a14ae2ba2410b031daed8cb08b81ce2b58c77b9faa14868bc64d",
+      "files": [
+        {
+          "filename": "2606.17978v1.pdf",
+          "file_hash": "a0d0168c935884b4d964eaebbd9ef737e4efecbf6a18374de2e22d247f15f492"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17972v1",
+      "id": "c5c00301",
+      "timestamp": "2026-06-19T17:44:44.059910Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "SegDINO presents a concise and practical idea: rather than building a heavier decoder around DINO features, the authors focus on injecting explicit multi-scale structure into intermediate DINOv3 representations and then decoding them with a lightweight scale-aware module. This is a sensible contribution, especially for medical image segmentation where fine boundaries and small lesions are critical. The method is well motivated, the design is easy to follow, and the ablation study supports the paper\u2019s main claim that token pyramid adaptation contributes more than decoder complexity. The introduction of the PanCT dataset is also valuable, since it targets a challenging small-lesion scenario and helps demonstrate the model\u2019s strengths beyond standard benchmarks.\n\nThat said, the paper\u2019s claims would be stronger with broader validation and deeper analysis. The experiments are limited to 2D slice-based segmentation, which leaves open how well SegDINO transfers to true volumetric medical imaging, and the comparison set is mostly composed of classic or mid-generation baselines rather than the most recent foundation-model-based segmentation methods. The parameter and speed discussion is useful, but the efficiency story would benefit from clearer fairness in backbone comparisons and more detail on training/inference settings. Overall, this is a strong and timely paper with a clear engineering insight and solid empirical results, though its novelty is more in effective adaptation and refinement than in a fundamentally new segmentation paradigm.",
+      "usage": {
+        "prompt_tokens": 10747,
+        "completion_tokens": 273,
+        "total_tokens": 11020,
+        "cost": 0.00928875
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891078-syUzDyREJ4TZ0Wz70zGZ",
+      "hash": "c5c003011296deb578eb9800f8fe84770e53424b1151dbfbb0ea6c76e621e88c",
+      "files": [
+        {
+          "filename": "2606.17972v1.pdf",
+          "file_hash": "1a8fd2c61995c7c2c35ec84e76f045bf836a412a801c606df614ad241a7b569a"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17962v1",
+      "id": "566271cb",
+      "timestamp": "2026-06-19T17:44:46.695817Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents a timely and interesting neuro-symbolic framework for NatATL strategy synthesis, using an LLM to propose candidate natural strategies and a formal verifier to certify them. The core idea is strong: instead of replacing symbolic reasoning, the LLM is used as a heuristic generator inside a sound generate-and-certify loop. That design is well matched to the NatATL setting, where the main bottleneck is strategy-space explosion rather than verification alone. I also found the introduction of the first NatATL synthesis dataset valuable, since benchmarks are often the missing ingredient for progress in specialized formal-methods tasks. The paper is clearly motivated, and the integration of verifier feedback into the synthesis loop is a nice practical touch.\n\nThat said, the empirical story would benefit from more rigor and clearer reporting. The 92% accuracy claim is promising, but the evaluation protocol leaves some questions about how performance should be interpreted given the treatment of parsing failures, retry budgets, and ATL pre-filtering. It would also help to see stronger baselines, such as non-LLM search heuristics or smaller language models, to isolate the contribution of the neuro-symbolic setup. In addition, the dataset generation process, while carefully designed, may still raise concerns about diversity and potential bias toward instances amenable to the chosen prompting format. Overall, this is a solid and novel paper with good practical relevance, but it would be stronger with deeper ablation studies, more transparent evaluation metrics, and a fuller comparison against alternative synthesis methods.",
+      "usage": {
+        "prompt_tokens": 13640,
+        "completion_tokens": 303,
+        "total_tokens": 13943,
+        "cost": 0.0115935
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891080-wZ0XvFk0fpWOhTqHpp7U",
+      "hash": "566271cb1f59bea69b89a85f47ead19d6ab7561d81efdef8756c02ac46510de4",
+      "files": [
+        {
+          "filename": "2606.17962v1.pdf",
+          "file_hash": "829990eb974ac95cf18a842a38e631a41245398600d145bffe6db6e1a7bfcd8b"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17961v1",
+      "id": "9382961b",
+      "timestamp": "2026-06-19T17:44:48.382882Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents a clear and timely study of similarity-based positional encoding (simPE), focusing on an important practical question: how it behaves under rotations. The theoretical section is well motivated and reasonably crisp. In particular, the authors do a good job distinguishing rotation invariance from stability, and the Lipschitz-based argument gives an intuitive explanation for why simPE can remain useful even without exact geometric invariance. The formal results are not especially deep mathematically, but they are sound in spirit and nicely aligned with the intended application domain. The discussion of assumptions is also helpful, especially the handling of normalization and boundedness.\n\nOn the experimental side, the paper is generally convincing. The controlled evaluation protocol is a strength: training on canonical orientations and testing on progressively rotated inputs makes the comparison between simPE and learned positional embeddings much cleaner than a standard augmented benchmark would. Across the synthetic Arrow, Shapes, and Digits datasets, simPE shows a consistent advantage in the small-to-moderate rotation regime, which supports the paper\u2019s main claim. FashionMNIST is a bit more mixed, and the crossover at larger angles suggests that the method is not uniformly superior in all settings, but the authors acknowledge this and interpret it reasonably. Overall, the paper is well written and methodologically careful, though it would be stronger with tighter bounds, clearer characterization of when simPE fails, and broader validation on more realistic medical imaging data rather than mostly synthetic benchmarks.\n\n",
+      "usage": {
+        "prompt_tokens": 13659,
+        "completion_tokens": 292,
+        "total_tokens": 13951,
+        "cost": 0.01155825
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891082-RNPIDZ02eDhCjHGo0M1U",
+      "hash": "9382961b2696dc080405e6815b15a2130093aa7b3b43b3aadcf3b02d07e9e206",
+      "files": [
+        {
+          "filename": "2606.17961v1.pdf",
+          "file_hash": "efe493e411d0afc1101d83269029cf96b693edf945c0033a0d02c611d29ceaeb"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17952v1",
+      "id": "8ab17109",
+      "timestamp": "2026-06-19T17:44:50.325994Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "SoftMoE presents a compelling and well-motivated improvement over standard sparse Mixture-of-Experts routing by making expert selection differentiable while preserving autoregressive compatibility. The main idea\u2014using a LapSum-based soft top-k relaxation with truncation\u2014feels technically elegant and practically useful, especially because it avoids the common tradeoff between differentiability and sparse inference. I also found the learned per-layer budget allocation to be one of the paper\u2019s strongest contributions: the result that later transformer layers consistently receive more expert capacity is interesting, intuitive, and potentially valuable for future MoE design. The experimental section supports the claims reasonably well, showing consistent gains in language modeling loss and downstream accuracy, often with fewer activated experts than Switch-style baselines.\n\nThat said, the paper would benefit from a more careful discussion of the computational and systems implications of the method. While the authors argue the overhead is small, the router is still more complex than hard top-k, and the use of truncation plus upper bounds on active experts adds implementation details that may matter at scale. The evaluation is also limited to English text and a 1.63B-parameter setting, so the broader generality of the learned allocation patterns remains somewhat uncertain. Overall, this is a strong paper with a clean contribution and solid empirical results; it advances a meaningful direction for adaptive conditional computation, though its claims would be even more convincing with larger-scale and more diverse validation.",
+      "usage": {
+        "prompt_tokens": 20245,
+        "completion_tokens": 290,
+        "total_tokens": 20535,
+        "cost": 0.01648875
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891084-qwqSGpfHK0R7SgLvV3uK",
+      "hash": "8ab17109e70a4f39d07d2967627748d88704844b1efcf38373f0ceaa57f81806",
+      "files": [
+        {
+          "filename": "2606.17952v1.pdf",
+          "file_hash": "005bae4f8e8d4557ed3d09db20619f3c5a2899d586a8e89da63862b340fec3ad"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17950v1",
+      "id": "571033ab",
+      "timestamp": "2026-06-19T17:47:14.657727Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper tackles an important and practical gap in multimodal coreference resolution: how to get strong performance without requiring task-specific annotated training data or relying on large, costly vision-language models. The main idea\u2014pretraining a relation-aware alignment model and then adapting it to coreference via similarity aggregation and evidential multi-cue fusion\u2014is well motivated and technically coherent. I especially liked the paper\u2019s emphasis on benchmark independence and accessibility, since those are real barriers to deployment in this area. The relation-triplet formulation is also a nice step beyond plain phrase-region grounding, and the evaluation is fairly comprehensive, covering the main CIN benchmark, masked robustness tests, and a newly constructed VCR-MCR dataset.\n\nThe empirical results are strong and suggest that the approach is genuinely effective, not just a repackaging of existing grounding models. The gains over both dedicated MCR baselines and several VLLMs are convincing, and the ablation studies help justify the design choices, particularly the multi-cue evidential fusion. That said, the method still depends on upstream components such as object detection and information extraction, and the paper\u2019s own error analysis shows that these can meaningfully affect performance. The use of evidence theory is interesting, but some of the formulation feels somewhat heuristic, and the contribution of each component could perhaps be isolated more cleanly. Overall, this is a solid and timely paper with a clear practical contribution, though its success still rests on assumptions about the quality of extracted triplets and detected regions.",
+      "usage": {
+        "prompt_tokens": 28375,
+        "completion_tokens": 303,
+        "total_tokens": 28678,
+        "cost": 0.02264475
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891215-DVgNRsJtsnNgK2O1qgiJ",
+      "hash": "571033ab3471ce41b6b4612b41306f147c8283a8f835f010b51f5a7187b370b9",
+      "files": [
+        {
+          "filename": "2606.17950v1.pdf",
+          "file_hash": "4107ef309ef27cabd76c91a6e5e171e2c2c14ac65d5abcc510b4d200c8010173"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17927v1",
+      "id": "d6de812f",
+      "timestamp": "2026-06-19T17:44:52.306446Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper makes a strong practical contribution by addressing a real gap in the KAN ecosystem: while Kolmogorov-Arnold Networks are conceptually appealing, existing implementations are fragmented, feature-inconsistent, and often slow. KANLib is presented as a unified framework that combines the strengths of PyKAN, EfficientKAN, and FastKAN into a modular PyTorch-based library. The paper is clear in explaining the underlying KAN formulation, the differences among prior implementations, and the design goals of the new system. In particular, the emphasis on feature parity, extensibility, and support for both B-spline and Gaussian RBF bases makes the framework useful for researchers who want to experiment systematically with KAN variants rather than being locked into one implementation\u2019s assumptions.\n\nThe experimental evaluation is convincing in showing that KANLib reproduces the predictive behavior of established baselines on California Housing while remaining computationally competitive. The comparison tables are helpful and support the claim that architectural flexibility does not substantially harm performance. That said, the evaluation is somewhat limited in scope: it relies on a single tabular regression benchmark and a relatively small set of model configurations, so broader claims about general utility would benefit from additional datasets and tasks. The runtime advantage of KANLib over PyKAN is meaningful, though the paper also acknowledges that its GRBF implementation is still slower than FastKAN, suggesting room for optimization. Overall, this is a well-motivated systems paper that should be valuable to the KAN research community, especially as a foundation for further experimentation and benchmarking.",
+      "usage": {
+        "prompt_tokens": 10241,
+        "completion_tokens": 313,
+        "total_tokens": 10554,
+        "cost": 0.00908925
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891086-CmjZmcl4pWfAPs0yn69o",
+      "hash": "d6de812fd73363fbb161865beaa78652dac17b467fbe245db17d401d4903b00d",
+      "files": [
+        {
+          "filename": "2606.17927v1.pdf",
+          "file_hash": "504028409d26f6238fa79b767f8f62d6a9a7e9e1f9ee199db7b11d97a615dabc"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17915v1",
+      "id": "fdba7122",
+      "timestamp": "2026-06-19T17:44:55.513364Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents an ambitious and timely vision for extending LLM-based automation beyond isolated data-science tasks into a full Big-Data-as-a-Service lifecycle. Its main strength is the clear architectural decomposition into specialized agents for ingestion, cleaning, feature engineering, AutoML, deployment, and drift monitoring, all coordinated by a central orchestrator. The added emphasis on artifact governance, human checkpoints, reproducibility, and drift-aware feedback loops is especially compelling, since these are often the missing pieces in prior agentic ML work. The paper is also well-motivated in its related work and does a good job positioning itself at the intersection of AutoML, MLOps, and trustworthy AI.\n\nThat said, the empirical contribution is limited by the prototype nature of the evaluation. The datasets are small, controlled benchmarks rather than real BDaaS workloads, and several reported gains in workflow reliability are somewhat expected given the system\u2019s broader scope compared to the baselines. The drift experiment is useful, but it is still simulated and does not fully demonstrate robustness in realistic production settings with operational noise, changing schemas, or cost constraints. In addition, some of the claims would benefit from stronger experimental rigor and clearer implementation details, especially around how agent decisions are validated and how much of the performance improvement comes from orchestration versus standard preprocessing. Overall, this is a promising systems paper with a strong conceptual contribution, but it would be substantially stronger with larger-scale, real-world validation.\n\n",
+      "usage": {
+        "prompt_tokens": 10318,
+        "completion_tokens": 294,
+        "total_tokens": 10612,
+        "cost": 0.0090615
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891088-Yu2tJ23aT0liAV6FETEE",
+      "hash": "fdba7122cdd00605497152f4df6561d1689600e998139d1fabcaa51c630fcc55",
+      "files": [
+        {
+          "filename": "2606.17915v1.pdf",
+          "file_hash": "847e105164532e6ada4ca19d274948a60122e7d6a3976256995ad809d5e40a99"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17910v1",
+      "id": "4f01de52",
+      "timestamp": "2026-06-19T17:44:55.986276Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents an interesting and timely alternative to standard dense retrieval by replacing independent inner-product scoring with a joint decoding objective based on non-negative elastic net regression. The main conceptual contribution is strong: the authors clearly identify a limitation of dense retrieval in settings where relevant documents are complementary rather than merely similar, and they support this with both theory and experiments. In particular, Theorem 1 provides a clean containment result showing that NNN decoding subsumes dense retrieval at the query level, while Proposition 2 demonstrates a strict separation on correlated corpora. That theoretical framing is elegant and helps make the method feel principled rather than ad hoc.\n\nEmpirically, the results are compelling. NNN decoding improves over dense retrieval when applied to frozen embeddings, and the end-to-end NNN-TR variant yields consistent gains across multiple benchmarks, especially on completeness-oriented metrics where redundancy matters most. I also appreciate the comparison against MMR and COLT, since it situates the method among practical diversity/completeness approaches rather than only against dense retrieval. The main weakness is scalability and deployment realism: solving an elastic-net problem over the full corpus for each query is more expensive than approximate nearest-neighbor search, and the need to tune global hyperparameters leaves a gap between the theory and practical use. Overall, this is a strong and original paper with a clear problem setting, solid analysis, and meaningful empirical gains, though its broader adoption will depend on making inference and training substantially more efficient.",
+      "usage": {
+        "prompt_tokens": 24389,
+        "completion_tokens": 298,
+        "total_tokens": 24687,
+        "cost": 0.01963275
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891091-gD9IM5P8MjKnPOJVV9Z2",
+      "hash": "4f01de524acd7f75fea7d67133c73428856285b3d1cd79db46f2a40c792a2ff6",
+      "files": [
+        {
+          "filename": "2606.17910v1.pdf",
+          "file_hash": "adb67ce1c663402dc988cd9de4df891a1e6f540cf41011cd21e406da32ce636e"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17904v1",
+      "id": "a93e9e4c",
+      "timestamp": "2026-06-19T17:45:00.694420Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper makes a strong and timely contribution by identifying a blind spot in flowchart-grounded diagnostic assistants: models often do not hallucinate outright, but instead \u201cforced map\u201d off-procedure inputs to real yet contextually wrong steps. The proposed DIAGFLOWBENCH benchmark is well-motivated, carefully constructed from real industrial procedures, and fills a clear gap between existing flowchart-following benchmarks and standard abstention datasets. I also found the multi-turn setup particularly valuable, since it reflects the conversational reality of maintenance support better than single-turn out-of-scope tests. The empirical finding that forced mapping is much more common than fabrication is important and practically relevant, especially for safety-critical deployments.\n\nThat said, the benchmark and analysis have some limitations that should temper the claims. The off-procedure inputs are synthetic rather than collected from real operator logs, so the extent to which they capture authentic workplace ambiguity is still uncertain. The evaluation also relies heavily on a language-model judge and a node-matching heuristic, which introduces some measurement noise, especially around the difficult FM-versus-CA boundary. In addition, all procedures come from a single industrial domain, and the prompt asks models to output a procedure node, which may inflate forced-mapping rates relative to systems with a more explicit abstention option. Even so, the paper is methodologically solid, clearly written, and offers a useful warning for practitioners: low hallucination rates are not enough if the model can still confidently give the wrong grounded step.",
+      "usage": {
+        "prompt_tokens": 19608,
+        "completion_tokens": 303,
+        "total_tokens": 19911,
+        "cost": 0.0160695
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891092-F1zl2FpfILa6YgrSQJGZ",
+      "hash": "a93e9e4c665b30f44e874e228df91d6aa39f340fec06057a8d7f0e50bf843806",
+      "files": [
+        {
+          "filename": "2606.17904v1.pdf",
+          "file_hash": "9715e5215876ed7903059ace7b2447e64151ff1497663da63c5cdd71bf5f974d"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17897v1",
+      "id": "40f75b68",
+      "timestamp": "2026-06-19T17:45:06.079186Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper tackles an important and timely problem: making pedestrian trajectory prediction both more accurate and more interpretable by explicitly quantifying social interaction patterns. Its main idea\u2014learning discrete latent interaction modes in a label-free way and using them to guide prediction\u2014is appealing, especially because most prior work treats social context as an opaque feature aggregation step. The use of a clustering-style latent variable formulation, combined with a coding-rate-based social loss, is a novel and interesting way to encourage separable interaction modes without manual annotation. The paper is also clear in its motivation and does a good job positioning the work relative to social attention, graph-based forecasting, and multimodal prediction methods.\n\nThat said, the paper leaves some important questions open. The interpretation of the learned modes appears somewhat heuristic, since the semantic meaning of each cluster is inferred indirectly from hand-designed scenarios rather than validated against ground-truth interaction labels. The method also seems sensitive to design choices such as the number of clusters, and the paper acknowledges that interpretability may reduce predictive accuracy, which suggests a tradeoff that is not fully resolved. In addition, the experimental evaluation is limited to ETH/UCY-style datasets, which are standard but relatively small and may not be enough to demonstrate robustness in more diverse or denser real-world settings. Overall, this is a promising and creative contribution with strong conceptual value, but it would benefit from deeper validation of the learned interaction modes and broader experiments to better establish generalizability and practical utility.",
+      "usage": {
+        "prompt_tokens": 16750,
+        "completion_tokens": 298,
+        "total_tokens": 17048,
+        "cost": 0.0139035
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891097-b6HttcQOwbuMmfvumZLZ",
+      "hash": "40f75b68fb6270873a6fe4faac17c2eb8f80edf53ee23ec9eca93faeed2603cf",
+      "files": [
+        {
+          "filename": "2606.17897v1.pdf",
+          "file_hash": "86474fcb18108fefadbceb8116e2e2290b4e6e5454e583ec300a3c718a94ffb9"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17889v1",
+      "id": "e22d7a2c",
+      "timestamp": "2026-06-19T17:45:03.207400Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper asks a clear and timely question in continual learning: when does modularity actually help, rather than just add architectural complexity? The main strength is the way it ties together task similarity, representational dimensionality, and internal geometry in a controlled sequential A\u2013B\u2013A setup. The results are persuasive at a high level: in the high-dimensional \u201clazy\u201d regime, modular and single-network models behave similarly, while in the lower-dimensional \u201crich\u201d regime, modularity provides clearer protection against interference and produces more structured, similarity-dependent subspaces. The combination of behavioral measures, PCA-based dimensionality, principal angles, and illustrative trajectory plots makes the story coherent and easy to follow. I also appreciate the ablations, which help show that the main effect is not just a width or depth artifact.\n\nThat said, the paper would benefit from a more cautious framing of the causal role of initialization scale. Since \u03b3 likely affects not only dimensionality but also optimization dynamics, conditioning, and effective learning rate, the interpretation that dimensionality alone \u201cgates\u201d modularity should be softened a bit. The use of PCA-derived effective dimensionality is reasonable, but it is still a proxy, and the qualitative 3D visualizations are supportive rather than definitive. It would also be helpful to see stronger comparisons against other continual-learning baselines such as replay or regularization methods, since modularity is only evaluated against a single-network baseline here. Overall, though, this is a thoughtful and well-executed study with a useful conceptual takeaway: modularity is most valuable not universally, but when the representational regime is constrained enough that subspace allocation becomes consequential.",
+      "usage": {
+        "prompt_tokens": 17718,
+        "completion_tokens": 334,
+        "total_tokens": 18052,
+        "cost": 0.0147915
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891097-cO7cCkavY1OFHOivjUCL",
+      "hash": "e22d7a2c0faec4b6661655a492d8bd4eaa0fe9eb44339c0dbe1c74c69f8a638f",
+      "files": [
+        {
+          "filename": "2606.17889v1.pdf",
+          "file_hash": "35c65fb1066e985fd9b906b7b3a4e1c31761c9e6b55285c3cb54222233a0b6c0"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17888v1",
+      "id": "37fcdbc1",
+      "timestamp": "2026-06-19T17:45:02.528334Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "MathVis-Fine presents a timely and well-motivated contribution to multimodal mathematical reasoning by arguing that visual supervision should be aligned with the actual necessity of the image in each problem, rather than applied uniformly. The paper\u2019s main strength is this dependency-aware framing: the authors introduce a dataset with explicit visual-dependency labels and step-level visual grounding, then use those labels to guide both supervised fine-tuning and reinforcement learning. The progressive training design is appealing, and the empirical results are strong, with consistent gains on MathVista, GeoQA, MMStar-Math, and HC-M3D. In particular, the ablation studies support the paper\u2019s core claims that both the retrieval-perception synergy loss and the dependency gating mechanism matter, and the analysis of correlation between visual grounding quality and answer accuracy provides a useful intuition for why the method works.\n\nThat said, the paper also raises some questions about annotation quality and generality. The visual-dependency labels are discrete and appear to rely heavily on a rule-based prompt plus manual inspection, which may introduce subjectivity or limit scalability; more discussion of annotation agreement and error analysis would strengthen confidence in the dataset. In addition, the gains, while meaningful, are evaluated mostly on benchmarks close to the training distribution, so it remains somewhat unclear how well the method transfers to broader multimodal reasoning tasks outside mathematical diagrams and charts. Finally, the method adds several moving parts\u2014dependency scores, masking-based synergy loss, dual visual rewards, and a judge model\u2014which makes the framework somewhat complex and potentially expensive to reproduce. Overall, however, this is a thoughtful and promising paper that makes a convincing case for adaptive visual supervision in multimodal math reasoning.",
+      "usage": {
+        "prompt_tokens": 17841,
+        "completion_tokens": 340,
+        "total_tokens": 18181,
+        "cost": 0.01491075
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891096-oWN5xobZ5YM8tW9UfO5I",
+      "hash": "37fcdbc112db139de7d3d042ae163d284a7562e8c5e532c0fd418c3f33e5dff7",
+      "files": [
+        {
+          "filename": "2606.17888v1.pdf",
+          "file_hash": "95f60a57c795c02b4726afe8f42d492c8c43e0d3eafd7082e31ef2f04a2902e9"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17887v1",
+      "id": "44353f59",
+      "timestamp": "2026-06-19T17:45:12.100016Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper offers a strong and timely contribution to the workplace AI adoption literature by studying a live transition from a legacy HR search tool to a GenAI-enhanced system inside a multinational firm. Its biggest strength is the mixed-method design: search logs, a survey, and interviews are combined in a way that lets the authors move beyond abstract acceptance models and show how adoption actually unfolds in practice. The paper is especially convincing in demonstrating that \u201cadoption\u201d is not a simple yes/no outcome, but a selective, situated process shaped by role, tenure, language, access to devices, and organizational familiarity. The concept of \u201csituational fit\u201d is useful and well-supported, and the discussion of trust calibration, fallback practices, and knowledge infrastructure adds depth to the analysis. The design recommendations are also practical and grounded in the empirical findings, particularly the call to treat knowledge management as part of AI infrastructure rather than an afterthought.\n\nThat said, the paper is constrained by its case-study nature, and some claims would benefit from broader sampling or more direct evidence from the workers most likely to be excluded, such as shift-based or blue-collar employees. The survey is small and descriptive, which the authors acknowledge, but this still limits how far the findings can be generalized across the organization or to other settings. In addition, the log analysis is useful for behavioral patterns, but the short observation window for the GenAI system makes cross-system comparisons somewhat uneven. Even with these limitations, the paper is persuasive and well-positioned: it makes an important argument that workplace GenAI success should be judged not by access alone, but by whether different groups can actually obtain reliable, actionable value.",
+      "usage": {
+        "prompt_tokens": 23008,
+        "completion_tokens": 336,
+        "total_tokens": 23344,
+        "cost": 0.018768
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891105-gOSfW1uU0AELwjvtj9Xj",
+      "hash": "44353f59225503846e6686f073225a974b808e88dc2ae7e1f5141228e59841c2",
+      "files": [
+        {
+          "filename": "2606.17887v1.pdf",
+          "file_hash": "3f848f1bf2a18fb3cbd07242a6d01db2f6a4cd7975acc3ccf900a3094816df4b"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17872v1",
+      "id": "63ac69cf",
+      "timestamp": "2026-06-19T17:45:10.565525Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper makes a timely and well-motivated contribution at the intersection of efficient inference and model safety. Its core observation\u2014that aggressive KV cache compression can worsen jailbreak vulnerability rather than merely preserve or degrade accuracy\u2014is important and convincingly demonstrated with clear empirical examples. The proposed AnchorKV method is elegant in concept: it reuses a representation-engineering idea to construct a harm anchor directly in key space, then injects that signal into token retention with a continuous penalty. I especially appreciated the clean ablation property at \u03bb = 0 and the careful layer-wise validation showing that the harm direction is recoverable in the eviction layer. The paper is also strong in framing safety as a first-class concern for compression methods, which is a useful correction to the prevailing accuracy-only evaluation paradigm.\n\nThat said, the method\u2019s practical robustness still feels somewhat limited by its dependence on a single linear anchor trained on an in-distribution harmful/harmless split. The authors acknowledge this, but it remains the main weakness: it is not yet clear how well the anchor transfers to unseen jailbreak families, broader safety categories, or different model families. The reversal regime at high \u03bb is a valuable warning, though the reliance on heuristic safeguards like sink protection and importance immunity suggests the method may need careful tuning to avoid cannibalizing utility. Overall, this is a strong and original paper with solid experiments and a clear message, but it would be even more compelling with broader out-of-distribution safety evaluation and a deeper analysis of failure modes across architectures and attack styles.",
+      "usage": {
+        "prompt_tokens": 15494,
+        "completion_tokens": 308,
+        "total_tokens": 15802,
+        "cost": 0.0130065
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891104-OuKjjpSijNnWhVVjb7kb",
+      "hash": "63ac69cfe31bc8c6d297a3a1bc97bc8d5aa286f4a157a0e5fc6762f480644525",
+      "files": [
+        {
+          "filename": "2606.17872v1.pdf",
+          "file_hash": "cd33a076b1c2826aefbc605f3bdcf050f066e96c4194ebc0819f28d0f246dc38"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17871v1",
+      "id": "c03cf120",
+      "timestamp": "2026-06-19T17:45:20.421621Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "StepGuard presents a timely and well-motivated approach to a real weakness in web agents: single-step fragility caused by conflicting objectives and error accumulation. Its two main ideas, Dynamic Dual-Policy Optimization (DDPO) and Confidence-Guided Adaptive Navigation Reflection (CANR), are intuitive and reasonably well-justified. In particular, the paper\u2019s attempt to separate navigation and answer-generation rewards is a sensible way to reduce gradient conflict, and the confidence-based reflection mechanism is appealing because it avoids the inefficiency of always-on self-correction. The experimental results on WebVLN and WebWalkerQA are strong, with consistent gains over the baseline and clear ablations showing that each component contributes. The qualitative examples also help make the method understandable and demonstrate the intended behavior in difficult navigation cases.\n\nThat said, the paper leans heavily on reward shaping and hand-crafted prompting, which may limit generality. The format reward appears especially important for stability, suggesting that much of the gain may depend on strong task-specific scaffolding rather than only on the core learning strategy. The confidence signal is also somewhat indirect: using KL divergence from a uniform distribution is a reasonable heuristic, but the paper does not fully establish that it is a robust or well-calibrated estimate of true uncertainty across broader settings. Overall, this is a solid and practical paper with clear empirical benefits, but its broader applicability to less structured environments remains uncertain.",
+      "usage": {
+        "prompt_tokens": 23933,
+        "completion_tokens": 287,
+        "total_tokens": 24220,
+        "cost": 0.01924125
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891111-wvtrx4ZINFLPWy3jwlRf",
+      "hash": "c03cf1205f42a1800cbec0ad7f48148f0a39563a704e6304d762f771dcb9d5de",
+      "files": [
+        {
+          "filename": "2606.17871v1.pdf",
+          "file_hash": "18c1d1d497ed60b00f72c5333df5c881b2f26bf156f721dbc5f85b938e7e4707"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17867v1",
+      "id": "bf0c5c02",
+      "timestamp": "2026-06-19T17:45:13.208557Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents a clear and timely quantitative analysis of multimodal biomarkers in Alzheimer\u2019s disease, combining tau-PET, structural MRI, cognition, and APOE \u03b54 data from a reasonably large ADNI cohort. Its main strength is interpretability: instead of building another black-box predictor, the authors ask what information is shared across modalities, which signals are redundant, and how pathology appears to unfold across brain regions. The use of multiple complementary analyses\u2014mutual information, explained variance, regional correlation, mediation analysis, and SuStAIn trajectory modeling\u2014gives the paper a coherent narrative about the relationship between tau accumulation, atrophy, and cognitive decline. The findings that clinical scores are highly redundant, that APOE is largely complementary to imaging and cognition, and that tau precedes atrophy in a plausible cascade are all useful and biologically intuitive.\n\nThat said, the paper\u2019s conclusions should be interpreted with some caution. The study is cross-sectional, so the temporal and mediation-related claims are necessarily associative rather than truly causal. The cohort is also limited to ADNI and contains relatively few AD subjects, which may reduce generalizability to more diverse or real-world populations. In addition, while the analyses are statistically well motivated, some of the methods\u2014especially the causal mediation and progression modeling\u2014depend on assumptions that are hard to verify from cross-sectional data alone. Overall, this is a solid and well-executed descriptive study that offers valuable insight into biomarker redundancy and complementarity in AD, but its strongest contribution is framing hypotheses and informing biomarker selection rather than establishing definitive disease mechanisms.",
+      "usage": {
+        "prompt_tokens": 11402,
+        "completion_tokens": 322,
+        "total_tokens": 11724,
+        "cost": 0.0100005
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891106-vYGGeAGjyR5yJ1WhA3hs",
+      "hash": "bf0c5c02a5a34ddf0b0cad62004068d3408e8d562df6c31cc39e9a8a6eba84f3",
+      "files": [
+        {
+          "filename": "2606.17867v1.pdf",
+          "file_hash": "6c2962435fcecfd47006f585167b7dac08421a8f003b135877002b2fb61ec078"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17856v1",
+      "id": "ea8fd481",
+      "timestamp": "2026-06-19T17:45:16.886157Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "FlowRAG presents a thoughtful and technically compelling approach to graph-based retrieval for multi-hop reasoning. Its main strength is the way it explicitly addresses two persistent weaknesses in GraphRAG systems: semantic sparsity at the entity level and noise propagation across hops. The quad-level graph design is well motivated, and the combination of summary- and sentence-level activation is a sensible way to bridge abstract queries with fine-grained evidence. The frequency-aware weighted flow mechanism is also a nice contribution, since it moves retrieval from generic graph traversal toward a more interpretable, evidence-prioritized process. The paper is clearly written overall, and the case study helps illustrate why explicit reasoning paths can outperform purely similarity-driven retrieval in practice.\n\nThe experimental results are strong and broadly convincing, with improvements over competitive baselines across multiple benchmarks, including gains in both end-to-end QA accuracy and retrieval recall. I also appreciate the authors\u2019 attention to efficiency and cost, since graph-based methods are often criticized for being too expensive to deploy. That said, some claims would benefit from a more careful discussion. In particular, the use of LLM-generated summaries as indexing hubs could introduce failure modes or biases that are only partially acknowledged, and the reliance on term frequency as a weighting signal may be less effective in domains where rare entities matter most. Overall, this is a solid and well-motivated paper that advances GraphRAG in a meaningful way, though a deeper analysis of robustness and summary quality would make the contribution even stronger.",
+      "usage": {
+        "prompt_tokens": 15002,
+        "completion_tokens": 301,
+        "total_tokens": 15303,
+        "cost": 0.012606
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891111-XG2wj6CymxibECKypwnR",
+      "hash": "ea8fd481865f5b9a3f5807fe1a53967b65276ccd7a8eb373f0d8ad0563687557",
+      "files": [
+        {
+          "filename": "2606.17856v1.pdf",
+          "file_hash": "460fa47b13c1e490c0168180baf92679bfa64dbcbf2eb695471b8b6dfdeefce9"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17851v1",
+      "id": "9612e92a",
+      "timestamp": "2026-06-19T17:45:19.749463Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents an ambitious and original reframing of neurosymbolic inference through homotopy type theory, arguing that the standard set-based formulation of weighted inference discards two crucial kinds of structure: symmetries among models and multiplicity of proofs. The main conceptual contribution is elegant: by replacing sets with types, the authors obtain a belief-weighted homotopy cardinality that unifies weighted model counting, provenance-style proof counting, and symmetry-aware inference under a single abstraction. The paper is also unusually strong in its mathematical development for an AI venue, with a clear conservativity theorem, a Lean 4 formalization, and a coherent explanation of how the framework collapses to classical neurosymbolic inference when symmetries are trivial or the semiring is idempotent.\n\nOn the empirical side, the paper makes a compelling case that the proposed orbit-averaging method can address reasoning shortcuts in a principled and lightweight way. The experiments on MNIST shortcut benchmarks are persuasive in showing improved calibration on confusable concepts without harming label accuracy or identifiable concepts, and the comparison against a diversity-trained ensemble is useful in highlighting the benefits of a closed-form, single-model approach. That said, the experimental section is still relatively narrow, and the practical relevance of the framework beyond symmetry-rich toy or benchmark settings remains somewhat speculative. In particular, the need to know or recover the symmetry group, and the reliance on finite settings, may limit immediate applicability.\n\nOverall, this is a highly creative and technically sophisticated paper that bridges category theory, logic, and neurosymbolic learning in a way that feels more like a foundational contribution than an incremental method paper. Its main strengths are conceptual unification, formal rigor, and a neat practical consequence for shortcut-aware prediction. Its main weakness is that the framework is somewhat abstract and the evaluation is limited to controlled cases, so the reader is left wanting broader evidence of impact on real-world NeSy systems. Still, it is a strong and thought-provoking piece of work.",
+      "usage": {
+        "prompt_tokens": 13414,
+        "completion_tokens": 405,
+        "total_tokens": 13819,
+        "cost": 0.011883
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891112-Vl3qb6fwdwzKYqZCvo5l",
+      "hash": "9612e92a94bdfb04c5f377854da91a7f18bfdd6fb2d5e260889e9ba7026cb5cc",
+      "files": [
+        {
+          "filename": "2606.17851v1.pdf",
+          "file_hash": "473b68c414426e3d1b9223bd94df3844c08963a27d842fafb0f74d898fc7f2d8"
+        }
+      ]
+    },
+    {
+      "custom_id": "2606.17847v1",
+      "id": "985716e0",
+      "timestamp": "2026-06-19T17:45:19.151642Z",
+      "model": "openai/gpt-5.4-mini",
+      "model_params": {
+        "temperature": 0.7
+      },
+      "prompt": "Write a review of this paper in 2-3 paragraphs.",
+      "output": "This paper presents a timely and well-motivated application of AlphaZero to WallGo, a new and still underexplored board game. The main technical contribution is solid: the authors identify that both action encoding and especially feature design matter a lot, and they show convincing empirical gains from adding reachability and territory information. The evaluation is broad for a game-AI paper, including self-play ablations, balance analysis, human matches against two professional Go players, and qualitative strategic interpretation. The results are impressive, particularly the strong win rates against the human experts and the fact that the agent can surface nontrivial concepts like implicit passing and reachability control.\n\nThat said, the paper\u2019s claims should be read with some caution. The human evaluation is interesting but limited to only two players, and although they are strong Go players, Go skill does not necessarily transfer cleanly to mastery of WallGo\u2019s distinct mechanics. The balance conclusions are also based on self-play from a single training family, so it is not fully clear how robust they are to different seeds, search settings, or stronger training regimes. The strategic analysis is insightful and nicely illustrated, but it remains largely anecdotal rather than systematically validated. Overall, this is a strong and engaging paper with clear practical value, especially as an early study of WallGo, though the empirical claims would benefit from more extensive human testing and deeper statistical analysis.",
+      "usage": {
+        "prompt_tokens": 15031,
+        "completion_tokens": 282,
+        "total_tokens": 15313,
+        "cost": 0.01254225
+      },
+      "finish_reason": "stop",
+      "openrouter_id": "gen-1781891113-7SKFRC8uMxh9BXxzM8JV",
+      "hash": "985716e0be9d22e7296eabb0a6bf8e2c886316296a6e2db0f9887fd25ec86461",
+      "files": [
+        {
+          "filename": "2606.17847v1.pdf",
+          "file_hash": "b8c8e58222d48761d21a66481929c5dd10c5a2178074aec6f7d177b273a8e0ec"
+        }
+      ]
+    }
+  ],
+  "failed_items": [],
+  "batch_hash": "9fea12a5419e01e27478cc139c4f6d471dcae02905360b98a072900dc32ee9da"
+}

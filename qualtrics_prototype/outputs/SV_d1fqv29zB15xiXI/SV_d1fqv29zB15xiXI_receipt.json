@@ -1,0 +1,10 @@
+{
+  "dataset_hash": "e7a0bb51b412018d6b387d16c82d47c565ab6f6d9495490552960de13c6d6622",
+  "dataset_sig": "a5332febbba8d52737e901d5839243d1f3147a9d11417dc2e78f0ca830cfedeaa63a54c311577621211bd26250d84e22110bd00fd31182f2a9152e4e036a5e03",
+  "row_count": 15,
+  "columns": [
+    "QID1",
+    "QID2_TEXT",
+    "QID3"
+  ]
+}
