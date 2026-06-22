@@ -56,6 +56,41 @@ Both components implement this with the same small module, `pcc.py`
 
 See each component's own README for the exact commands for each role.
 
+## Running the UIs
+
+There are three separate apps. Each needs its dependencies installed first
+(`pip install -r requirements.txt` inside that component's folder), and each
+must be run from inside its own folder.
+
+**1. LLM Evals query UI** (the researcher facing tool that actually calls
+OpenRouter and produces signed records):
+```
+cd llm_evals_prototype
+uvicorn main:app --reload
+```
+Open **http://localhost:8000**.
+
+**2. LLM Evals verification UI** (point and click Verify / Merge Receipts
+for `llm_evals_prototype` records):
+```
+cd llm_evals_prototype
+python3 verification_ui.py
+```
+Open **http://localhost:8053**.
+
+**3. Qualtrics verification UI** (point and click verifier for
+`qualtrics_prototype` datasets):
+```
+cd qualtrics_prototype
+python3 verification_ui.py
+```
+Open **http://localhost:8052**.
+
+> **App 2 (LLM Evals verification UI) uses port 8053, the same port as the
+> [tutorial walkthrough UI](#walkthrough-tutorials) below.** Don't run both
+> at the same time unless you change one of their ports. Apps 1 (8000) and
+> 3 (8052) don't conflict with anything.
+
 ## Walkthrough tutorials
 
 Step by step, screenshot heavy walkthroughs for every workflow in both
