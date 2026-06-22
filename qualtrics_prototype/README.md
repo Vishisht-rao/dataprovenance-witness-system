@@ -116,11 +116,14 @@ and redaction code in that file.
 
 ## Other tools in this folder
 
-* `tutorial_ui.py` and `verification_ui.py`: Dash apps for a walkthrough UI
-  and a point and click verifier respectively. Run with system Python
-  (they need `dash` and `cryptography`, which a bare virtualenv may not
-  have):
+* `verification_ui.py`: a Dash point and click verifier. Run with system
+  Python (it needs `dash` and `cryptography`, which a bare virtualenv may
+  not have):
   ```
-  python3 tutorial_ui.py        # http://localhost:8053
   python3 verification_ui.py    # http://localhost:8052
   ```
+
+For a guided, screenshot walkthrough of this tool (and everything else in
+this repo), see [`../tutorials/`](../tutorials/): run
+`python3 tutorials/tutorial_ui.py` (http://localhost:8053), or just open the
+matching PDF under `tutorials/pdfs/`.

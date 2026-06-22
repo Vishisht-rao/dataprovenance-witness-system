@@ -56,6 +56,20 @@ Both components implement this with the same small module, `pcc.py`
 
 See each component's own README for the exact commands for each role.
 
+## Walkthrough tutorials
+
+Step by step, screenshot heavy walkthroughs for every workflow in both
+components live in [`tutorials/`](tutorials/): Qualtrics setup, Qualtrics
+verification, LLM provenance (single prompt and batch processing), and LLM
+verification (merging and verifying). Run them interactively:
+
+```
+python3 tutorials/tutorial_ui.py    # http://localhost:8053
+```
+
+or, if you'd rather just read one, open the matching PDF under
+[`tutorials/pdfs/`](tutorials/pdfs/).
+
 ## Pilot data included
 
 Both components ship with real, already witnessed pilot runs so you can
@@ -78,5 +92,6 @@ didn't.
 ```
 dataprovenance-witness-system/
 ├── qualtrics_prototype/      survey response witness
-└── llm_evals_prototype/      LLM API call witness
+├── llm_evals_prototype/      LLM API call witness
+└── tutorials/                walkthrough UI + PDFs for both components
 ```

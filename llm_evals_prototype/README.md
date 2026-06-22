@@ -138,6 +138,12 @@ from there first.
   python3 verification_ui.py    # http://localhost:8053
   ```
 
+For a guided, screenshot walkthrough of this tool (and everything else in
+this repo), see [`../tutorials/`](../tutorials/): run
+`python3 tutorials/tutorial_ui.py` (also http://localhost:8053, so don't run
+it at the same time as `verification_ui.py` above), or just open the
+matching PDF under `tutorials/pdfs/`.
+
 ## Security note
 
 Your OpenRouter API key is never saved to disk. It is used only for the
